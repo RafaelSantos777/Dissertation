@@ -1,4 +1,4 @@
-\documentclass[12pt,reqno, oneside]{amsbook}
+\documentclass[12pt, reqno, oneside]{amsbook}
 %
 \usepackage{eurosym}
 \usepackage{amsmath}
@@ -20,6 +20,7 @@
 \usepackage{float}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{longtable}
 
 %
 % Uncomment the command below if you use eps format for figures
@@ -239,7 +240,7 @@
 \pagenumbering{roman} %
 \chapter*{Acknowledgment}
 
-Write here the acknowledgments and grants, if any...
+This dissertation represents an end to a long academic journey. I am grateful for my family and friends, who gave me their unconditional support throughout this time. I want to give a special tribute to my father, who I know would be very proud of this achievement. I would also like to thank my supervisors, Doctor Ana Maria de Almeida and Doctor Carlos Coutinho, for their guidance and patience.
 
 \chapter*{Resumo}
 
@@ -271,6 +272,7 @@ Write your abstract here in English.
   \acro{DNS}{Domain Name System}
   \acro{DSRM}{Design Science Research Methodology}
   \acro{DTO}{Data Transfer Object}
+  \acro{GB}{Gigabyte}
   \acro{HTTP}{Hypertext Transfer Protocol}
   \acro{HTTPS}{Hypertext Transfer Protocol Secure}
   \acro{IATA}{International Air Transport Association}
@@ -294,8 +296,10 @@ Write your abstract here in English.
   \acro{SaaS}{Software as a Service}
   \acro{SOA}{Service-Oriented Architecture}
   \acro{SPA}{Single-Page Application}
+  \acro{SQL}{Structured Query Language}
   \acro{UI}{User Interface}
   \acro{URL}{Uniform Resource Locator}
+  \acro{vCore}{Virtual Core}
   \acro{VNet}{Virtual Network}
   \acro{VM}{Virtual Machine}
   \acro{XML}{eXtensible Markup Language}
@@ -322,6 +326,7 @@ Devlop\footnote{Devlop, \url{https://devlop.systems/}, (accessed 16 Aug. 2025)},
 
 This dissertation proposes a conceptual framework to address these integration and scalability challenges, which may be present in other projects with similar characteristics in any industry. To do so, it uses a proof-of-concept implementation to detail and evaluate its architecture.
 
+\pagebreak
 
 \section{Motivation}
 \label{Section:Motivation}
@@ -332,29 +337,34 @@ Even though the theoretical benefits of microservices and cloud computing are we
 
 The author of this dissertation is motivated by the possibility to learn about modern enterprise-level software architecture and contribute to both the academic and enterprise communities.
 
-\textbf{[Este último parágrafo é apropriado?]}
-
-
 \section{Research Questions}
 \label{Section:Research_Questions}
 
 Based on the considerations presented in Section~\ref{Section:Motivation}, this research presents a conceptual framework for developing cloud-native web \acp{API} that integrate and aggregate external services. This study is guided by this research question:
 \begin{research_question}
-  What is the ideal software architecture for complex web applications that need to integrate several external \acp{API}?
+  How to design and implement a software architecture that meets the requirements of complex web applications integrating several external \acp{API}?
 \end{research_question}
 
 The research question leads the following hypothesis, which will be studied in this paper:
 
 \begin{hypothesis}
-  A microservices architecture, orchestrated through an \ac{API} Gateway and deployed to a feature-rich cloud platform, is the most suitable choice for complex web applications integrating multiple external \acp{API}.
+  A microservices architecture, orchestrated through an \ac{API} Gateway and deployed to a cloud platform, is the most suitable choice for complex web applications integrating multiple external \acp{API}.
 \end{hypothesis}
-
-\textbf{[Defini uma hipótese pois era requisito na lista de tarefas no Asana. Faz sentido oferecer uma hipótese? Na introdução dou a entender que o objetivo da dissertação é propor uma framework conceptual para x. Provar a hipótese definida acima deve ser o objectivo fundamental da dissertação?]}
 
 \section{Document Structure}
 \label{Section:Document_Structure}
 
-This document is divided into ??? chapters:
+This document is divided into seven chapters:
+
+\begin{description}
+  \item [Chapter \ref{Chapter:Introduction}: \nameref{Chapter:Introduction}] This chapter introduces the context, motivation, research question, and hypothesis of this dissertation.
+  \item [Chapter \ref{Chapter:Literature_Review}: \nameref{Chapter:Literature_Review}] This chapter presents a literature review that offers a theoretical background on the main topics relevant to this dissertation.
+  \item [Chapter \ref{Chapter:Research_Methodology}: \nameref{Chapter:Research_Methodology}] This chapter explains the research methodology, including the strategy for identifying relevant literature.
+  \item [Chapter \ref{Chapter:Design_And_Architecture}: \nameref{Chapter:Design_And_Architecture}] This chapter details the design and architecture of the proposed solution.
+  \item [Chapter \ref{Chapter:Implementation}: \nameref{Chapter:Implementation}] This chapter demonstrates and discusses the implementation of the proposed solution.
+  \item [Chapter \ref{Chapter:Evaluation}: \nameref{Chapter:Evaluation}] This chapter evaluates the implemented solution on correctness, cost, performance, and efficacy.
+  \item [Chapter \ref{Chapter:Conclusion}: \nameref{Chapter:Conclusion}] This chapter concludes the dissertation, highlighting the main findings, limitations, and suggesting future work.
+\end{description}
 
 \chapter{Literature Review}
 \label{Chapter:Literature_Review}
@@ -506,7 +516,7 @@ Cloud services can be divided into three distinct models:
 
 Cloud computing has several advantages over self-hosting. It prevents expensive asset acquisitions and reduces maintenance costs because resources are only paid for when they are actually needed. Furthermore, it allows companies to scale their services as required, since cloud resources can be purchased in practically any quantity and readjusted fast. Cloud providers also have fallback data centers they can resort to in case of failure without affecting the user experience, improving reliability. Finally, by providing on-demand infrastructure, cloud computing speeds up the development and testing of new solutions while decreasing financial risk, promoting innovation~\cite{Figueira2024, Nordic2012, Alam2020, Nadeem2024, Villamizar2016}.
 
-However, cloud computing also has some disadvantages. Choosing a cloud-based service means that a third-party organization, possibly a foreign one, now manages sensitive data. This raises security issues, as well as legal considerations related to data protection regulations. Another drawback is low interoperability; once a company chooses a particular cloud provider, changing to another or working with multiple is difficult. In addition, the limited flexibility and customization of cloud computing can inhibit integration with certain systems~\cite{Nordic2012, Alam2020}.
+Nevertheless, cloud computing also has some disadvantages. Choosing a cloud-based service means that a third-party organization, possibly a foreign one, now manages sensitive data. This raises security issues, as well as legal considerations related to data protection regulations. Another drawback is low interoperability; once a company chooses a particular cloud provider, changing to another or working with multiple is difficult. In addition, the limited flexibility and customization of cloud computing can inhibit integration with certain systems~\cite{Nordic2012, Alam2020}.
 
 Overall, cloud computing is changing the way businesses deliver their software solutions. It is democratizing the impact of \ac{IT} by giving companies of any size instant access to high-quality computing infrastructure. With this technology, software developers can develop and deploy web applications faster while reducing costs~\cite{Figueira2024, Berry2021, Nadeem2024}.
 
@@ -649,9 +659,11 @@ The design and architecture of the web \ac{API} are guided by a specific list of
   Freight rates from external carrier \acp{API} must be cached for 1 day to avoid reaching rate limits.
 \end{requirement}
 
+\pagebreak
+
 \begin{requirement}
   \label{Requirement:10}
-  Under a sustained load of 500 requests per second, the 95th percentile response time for GET requests that do not require external \ac{API} calls must be less than 200 milliseconds.
+  When serving concurrent 200 users sending basic GET requests, the 90th percentile response time must be less than 500 milliseconds. Basic GET requests are those that simply retrieve a database record based on its unique identifier from the database.
 \end{requirement}
 
 \begin{requirement}
@@ -661,7 +673,7 @@ The design and architecture of the web \ac{API} are guided by a specific list of
 
 \begin{requirement}
   \label{Requirement:12}
-  Authentication must be done securely via the \ac{OAuth} 2.0 and \ac{OIDC} protocols, without storing user credentials within the system's databases.
+  Authentication must be done securely via the \ac{OAuth} 2.0 and \ac{OIDC} protocols, without storing user credentials in the system's databases.
 \end{requirement}
 
 
@@ -690,6 +702,7 @@ The Client is the user-facing application that serves as the primary interface t
 \label{Subsection:API_Gateway}
 
 The \ac{API} Gateway functions as the single entry point for all incoming Client requests, similarly to the pattern described in Subsection \ref{Subsection:Microservices_Architecture}. This component routes requests to the appropriate microservice, allowing the Client to interact with the system without needing to know what microservices it contains. The \ac{API} Gateway also enforces authentication by validating access tokens (\acp{JWT}).
+
 \subsection{Microservice Environment}
 \label{Subsection:Microservice_Environment}
 
@@ -711,6 +724,7 @@ The \ac{VNet} provides network isolation for the system's components in the clou
 The Data Persistence Layer manages the persistent storage of the web \ac{API}'s data. This layer may consist of multiple database technologies, as each microservice owns its data and communicates with its corresponding database. Access to this layer is secured through a private endpoint within the VNet.
 
 \subsection{Identity Provider}
+\label{Subsection:Identity_Provider}
 
 The Identity Provider is an external service responsible for all user authentication and account management. It implements the \ac{OAuth} 2.0 and \ac{OIDC} protocols to authenticate users and issue \acp{JWT} to the Client. By delegating authentication and account management to an instance of a specialized Identity Provider, the system avoids storing user credentials and benefits from enterprise-level security features, such as multifactor authentication.
 
@@ -743,6 +757,7 @@ The Container Registry is a private repository for storing and managing the vers
 The architecture presented in Section \ref{Section:High_Level_Architecture} defines a set of components. These components must communicate with each other to achieve their objectives. This Section explains the web \ac{API}'s runtime communication, which refers to the exchange of data between components that typically occurs while the microservices are running.
 
 \subsection{Client-Server Communication}
+\label{Subsection:Client_Server_Communication}
 
 The client-server communication includes all requests sent by the Client to a server-side component: either the \ac{API} Gateway or the Identity Provider. It also includes the \ac{API} Gateway routing to the correct microservice, since successful Client requests are ultimately handled in the Microservice Environment. Figure \ref{Figure:ClientServerCommunication} illustrates these interactions.
 
@@ -781,6 +796,7 @@ Each microservice establishes a connection to its correspondent database and per
 \pagebreak
 
 \subsection{Direct Inter-Service Communication}
+\label{Subsection:Direct_Inter_Service_Communication}
 
 Microservices can communicate with each other directly by making \ac{HTTP} requests to each other's endpoints. Some of these endpoints may only be reachable to other services, not the Client. This allows for real-time data exchange and coordination between services.
 
@@ -819,6 +835,7 @@ The second scenario occurs when Cargofive Service needs to synchronize data with
 \pagebreak
 
 \subsection{External Carrier API Communication}
+\label{Subsection:External_Carrier_API_Communication}
 
 WebCargo Service and Cargofive Service communicate with the WebCargo and Cargofive \acp{API}, respectively. The two services use the \acp{API} as clients to send requests and receive responses, as shown in Figure \ref{Figure:ExternalCarrierAPICommunication}. The \ac{API} keys required for authentication are retrieved from the Secret Storage at runtime and stored in memory.
 
@@ -857,6 +874,7 @@ In the web \ac{API}, the source code of each microservice adheres to a similar a
 \pagebreak
 
 \subsection{Middleware}
+\label{Subsection:Middleware}
 
 The middleware pipeline directly interacts with incoming requests and outgoing responses in a specified order of middleware processes. Each process can inspect or change the request or response. In the web \ac{API} being designed, three middleware processes are applied in this exact order:
 
@@ -890,7 +908,7 @@ Repositories provide functions for database access and manipulation. They act as
 \section{Deployment}
 \label{Section:Deployment}
 
-The web \ac{API}'s microservices are deployed to the cloud platform through a \ac{CI/CD} pipeline. This pipeline automates the build, test, and deployment processes, ensuring that the relevant microservice instances running in the cloud are promptly updated. The \ac{CI/CD} pipeline is triggered whenever a change is pushed to the main branch of the Code Repository. Figure \ref{Figure:Deployment} illustrates the two main steps of the deployment process.
+The web \ac{API}'s microservices are deployed to the cloud platform through a \ac{CI/CD} pipeline. This pipeline automates the build, test, and deployment processes, ensuring that the relevant microservice instances running in the cloud are promptly updated. The \ac{CI/CD} pipeline is triggered whenever a change is pushed to the master branch of the Code Repository. Figure \ref{Figure:Deployment} illustrates the two main steps of the deployment process.
 
 \begin{figure}[H]
   \centering
@@ -958,6 +976,7 @@ The complete source code for the \ac{API}'s microservices and their respective d
 \pagebreak
 
 \section{Microservices Implementation}
+\label{Section:Microservices_Implementation}
 
 \subsection{Project Structure}
 
@@ -966,7 +985,7 @@ Figure \ref{Figure:ProjectStructure} shows the project structure of the solution
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.72\linewidth]{images/ProjectStructure.png}
+  \includegraphics[width=0.55\linewidth]{images/ProjectStructure.png}
   \caption{\label{Figure:ProjectStructure}Project Structure}
 \end{figure}
 
@@ -987,6 +1006,7 @@ Besides the microservice components described in Section \ref{Section:Internal_A
 \pagebreak
 
 \subsection{Freight Rates and Quotes Obtainment}
+\label{Subsection:Freight_Rates_And_Quotes_Obtainment}
 
 When user makes a quote request to the web \ac{API}, it is routed to Quotation Service, which orchestrates the process by interacting with WebCargo Service and Cargofive Service.
 
@@ -1038,7 +1058,7 @@ Finally, Quotation Service works with the received freight rates to calculate fr
   \caption{\label{Figure:AirQuoteResponseDTO}Air Quote Response DTO}
 \end{figure}
 
-The functionality described in this subsection can be tested in Postman. Figure \ref{Figure:AirQuoteRequestPostman} shows an example air quote request. Figure \ref{Figure:AirQuoteResponsePostman} shows a part of the corresponding response.
+The functionality described in this subsection can be tested in Postman. Figure \ref{Figure:AirQuoteRequestPostman} shows an example air quote request, where "baseUrl" is the \ac{URL} of the API Gateway. Figure \ref{Figure:AirQuoteResponsePostman} shows a part of the corresponding response.
 
 
 \begin{figure}[H]
@@ -1049,11 +1069,14 @@ The functionality described in this subsection can be tested in Postman. Figure 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\linewidth]{images/AirQuoteResponsePostman.png}
+  \includegraphics[width=0.8\linewidth]{images/AirQuoteResponsePostman.png}
   \caption{\label{Figure:AirQuoteResponsePostman}Air Quote Response in Postman}
 \end{figure}
 
+\pagebreak
+
 \subsection{Freight Rates Cache}
+\label{Subsection:Freight_Rates_Cache}
 
 External carrier \acp{API} impose rate limits on the number of requests that can be made within a specific time frame. To avoid exceeding these limits, freight rates obtained from the WebCargo and Cargofive \Acp{API} are cached for 1 day. The caching mechanism is implemented in WebCargo Service and Cargofive Service, respectively.
 
@@ -1072,7 +1095,7 @@ Figure \ref{Figure:QuoteHistoryRequestPostman} shows an example request to the q
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\linewidth]{images/QuoteHistoryRequestPostman.png}
+  \includegraphics[width=0.8\linewidth]{images/QuoteHistoryRequestPostman.png}
   \caption{\label{Figure:QuoteHistoryRequestPostman}Quote History Request in Postman}
 \end{figure}
 
@@ -1086,6 +1109,7 @@ Figure \ref{Figure:QuoteHistoryRequestPostman} shows an example request to the q
 \pagebreak
 
 \subsection{Location Search}
+\label{Subsection:Location_Search}
 
 Quotation Service exposes an endpoint that allows users to search for locations by name. This functionality is useful when users need to find the identifier of a location to use in a freight quote request.
 
@@ -1108,8 +1132,9 @@ Figure \ref{Figure:LocationSearchRequestPostman} shows an example request to the
 \pagebreak
 
 \subsection{\texorpdfstring{\ac{RBAC}}{RBAC}}
+\label{Subsection:RBAC}
 
-The microservices rely on the authentication verification performed by the \ac{API} Gateway. Therefore, they do not need to validate access tokens themselves. However, they must enforce authorization policies to restrict access to resources based on user roles or more complex business rules.
+The microservices rely on the authentication verification performed by the \ac{API} Gateway. Therefore, they do not need to validate access tokens themselves. Still, they must enforce authorization policies to restrict access to resources based on user roles or more complex business rules.
 
 Only users with the "Administrator" role can access the endpoint to search for other users in the system. User roles can be found in the "roles" claim of the access token (\ac{JWT}). User roles can be assigned manually through the Azure portal. Alternatively, User Service can assign roles by calling the appropriate Graph \ac{API}\footnote{Microsoft Learn, "Use the Microsoft Graph API", \url{https://learn.microsoft.com/en-us/graph/use-the-api}, (accessed 15 Sep. 2025)} endpoint, which is used to interact with Microsoft's cloud resources.
 
@@ -1117,7 +1142,7 @@ Figure \ref{Figure:UserSearchRequestPostman} shows a search request in Postman f
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\linewidth]{images/UserSearchRequestPostman.png}
+  \includegraphics[width=0.8\linewidth]{images/UserSearchRequestPostman.png}
   \caption{\label{Figure:UserSearchRequestPostman}User Search Request in Postman}
 \end{figure}
 
@@ -1134,18 +1159,20 @@ Figure \ref{Figure:UserSearchRequestPostman} shows a search request in Postman f
 \end{figure}
 
 \subsection{User Data Deletion}
+\label{Subsection:User_Data_Deletion}
 
 When a user is deleted, all their associated data is also deleted from the web \ac{API}'s databases. Since Entra ID is the Identity Provider, it is responsible for managing user accounts. Therefore, User Service must be informed about user account deletions by communicating with Entra ID. In Subsection \ref{Subsection:Event_Driven_Inter_Service_Communication}, two possible approaches to get this information were mentioned: subscribing to the Identity Provider's user deletion notifications, or polling the Identity Provider periodically. Entra ID supports both approaches through the Microsoft Graph \ac{API}.
 
 The first approach involves subscribing to Microsoft Graph \ac{API}'s change notifications for user deletions. This requires setting up a webhook endpoint in User Service to receive notifications, which Entra ID communicates with. However, the Graph \ac{API} only supports this approach for workforce tenants, which are intended for employees of an organization. The implemented web \ac{API} is intended for general customer users and thus utilizes a different tenant type. Therefore, this event-driven approach is not feasible for the web \ac{API}.
 
-The second approach involves polling the Microsoft Graph \ac{API} periodically. Indiscriminate polling would be inefficient, as it would involve returning all users and checking for deletions. Instead, User Service uses delta queries\footnote{Microsoft Learn, "Use delta query to track changes in Microsoft Graph data", \url{https://learn.microsoft.com/en-us/graph/delta-query-overview}, (accessed 15 Sep. 2025)} to retrieve only the changes that occurred since the last query. This is achieved by storing a delta link provided by the Graph \ac{API} after each query in the User Service's database. The delta link is then used in subsequent queries to fetch only the changes since the last query. User Service polls the Graph \ac{API} every 15 minutes.
+The second approach involves polling the Microsoft Graph \ac{API}. Indiscriminate polling would be inefficient, as it would involve returning all users and checking for deletions. Instead, User Service uses delta queries\footnote{Microsoft Learn, "Use delta query to track changes in Microsoft Graph data", \url{https://learn.microsoft.com/en-us/graph/delta-query-overview}, (accessed 15 Sep. 2025)} to retrieve only the changes that occurred since the last query. This is achieved by storing a delta link provided by the Graph \ac{API} after each query in the User Service's database. The delta link is then used in subsequent queries to fetch only the changes since the last query. User Service polls the Graph \ac{API} every 15 minutes.
 
 When User Service retrieves at least one deleted user through polling, it sends a batch of messages to a Service Bus (Message Broker) topic called "user\_deleted". Each message contains the identifier of a deleted user. Any microservice may subscribe to this topic. In particular, Quotation Service has a subscription to this topic and processes each message by deleting the quote history of the corresponding user from its database.
 
 \section{Cloud Components Configuration}
 
 \subsection{API Gateway Configuration}
+\label{Subsection:API_Gateway_Configuration}
 
 An Azure \ac{API} Management instance is used to route incoming requests to the appropriate microservice, thus acting as the \ac{API} Gateway. A single \ac{API} is added to the \Ac{API} Management instance by importing the definition from the OpenAPI specification file mentioned in Section \ref{Section:API_Specification}. This \ac{API} is named "Freight Quotation API".
 
@@ -1167,7 +1194,7 @@ Unlike the microservice components, the \ac{API} Gateway accepts communication f
 
 The \ac{API} Gateway's behavior towards the Freight Quotation API is defined in the "Design" tab. In this tab, an \ac{XML} configuration file defines multiple policies that are applied to incoming requests or outgoing responses. Considering the roles of the \ac{API} Gateway mentioned in Subsection \ref{Subsection:API_Gateway}, the policies can be split into three parts: \Ac{CORS}, authentication, and routing.
 
-\ac{CORS} policies are applied to all incoming requests to allow cross-origin requests from the Client. Since the Client application does not have a fixed domain name, the \ac{CORS} policy allows requests from any origin. The \ac{API} Gateway also accepts any \ac{HTTP} method. However, if the Client had a fixed domain name, the \ac{CORS} policy would be more restrictive. The \ac{CORS} policy is shown in Figure \ref{Figure:APIGatewayConfigurationCORS}.
+\ac{CORS} policies are applied to all incoming requests to allow cross-origin requests from the Client. Since the Client application does not have a fixed domain name, the \ac{CORS} policy allows requests from any origin and accepts any \ac{HTTP} method. However, if the Client had a fixed domain name, the \ac{CORS} policy would be more restrictive. The \ac{CORS} policy is shown in Figure \ref{Figure:APIGatewayConfigurationCORS}.
 
 \begin{figure}[H]
   \centering
@@ -1192,6 +1219,7 @@ Finally, the \ac{API} Gateway routes incoming requests to the appropriate micros
 \end{figure}
 
 \subsection{Microservice Environment Configuration}
+\label{Subsection:Microservice_Environment_Configuration}
 
 The Azure Container Apps Environment hosts all microservices as Azure Container Apps. In addition, there is one Container App Job for each microservice, which is used to apply database migrations when a new deployment occurs. The Container Apps Environment resides within a dedicated subnet ("ContainerEnvironmentSubnet") in the \ac{VNet} to ensure secure communication. This subnet adheres to default Azure subnet policies, which only allow traffic from other components within the \ac{VNet}, or private endpoints. Figure \ref{Figure:ContainerAppsEnvironment} shows the overall configuration of the Container Apps Environment.
 
@@ -1203,7 +1231,7 @@ The Azure Container Apps Environment hosts all microservices as Azure Container 
 
 Each microservice is deployed as a separate Container App. Each Container App runs a specific Docker image version stored in the Container Registry. When the \ac{CI/CD} pipeline deploys a new version of a microservice, it updates the Container App to use the new Docker image, creating a revision of the Container App. Microservices run in Docker containers of that image.
 
-Another useful feature is the ability to set scaling rules for each microservice, which may be based on \ac{HTTP} traffic, \ac{CPU} usage, or memory usage. Specifically, every Container App is configured to scale between 1 and 10 instances, based on the average number of concurrent \ac{HTTP} requests being processed per instance. If this number exceeds 10, the Container App will automatically scale up to deal with the increased load. Conversely, if the average workload remains lower for 5 minutes, the Container App will scale down to conserve resources. Figure \ref{Figure:ContainerAppsScaling} shows the scaling configuration.
+Another valuable feature is the ability to set scaling rules for each microservice, which may be based on \ac{HTTP} traffic, \ac{CPU} usage, or memory usage. Specifically, every Container App is configured to scale between 1 and 10 instances, based on the average number of concurrent \ac{HTTP} requests being processed per instance. If this number exceeds 50, the Container App will automatically scale up to deal with the increased load. Conversely, if the average workload remains lower for 5 minutes, the Container App will scale down to conserve resources. Figure \ref{Figure:ContainerAppsScaling} shows the scaling configuration.
 
 \begin{figure}[H]
   \centering
@@ -1213,30 +1241,263 @@ Another useful feature is the ability to set scaling rules for each microservice
 
 \subsection{Data Persistence Layer Configuration}
 
-\subsection{Message Broker Configuration}
+An Azure SQL Server instance hosts the databases of all microservices. Each microservice has its own SQL database. Public access to the SQL Server is disabled, and it can only be accessed from within the \ac{VNet} through a private endpoint.
 
-\subsection{Secret Storage Configuration}
-
-For security reasons, the source code of each microservice does not contain any secret values. Instead, Azure Key Vault is used to securely store confidential information for production environments, which is made available to the microservices through a private endpoint. The Key Vault stores the \ac{API} keys to authenticate wih external carrier \acp{API}, the Service Bus connection string, and the secret to access Entra ID's resources. Figure \ref{Figure:KeyVaultSecrets} enumerates the names of all secrets.
+Every microservice connects to its database through passwordless authentication, which allows Container Apps to authenticate without storing confidential connection strings. Instead, a generic connection string that only depends on the name of the target database is enough. To achieve this, each Container App is assigned a managed identity, which is then granted the "db\_datareader" and "db\_datawriter" roles in the target database. Figure \ref{Figure:DatabaseConfigurationManagedIdentity} shows the active managed identity of WebCargo Service's Container App, which is similar for all other microservices.
+Figure \ref{Figure:DatabaseConfigurationQuery} demonstrates the subsequent step, where a \ac{SQL} query executed in the Azure Portal to assign the necessary database roles.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\linewidth]{images/KeyVaultSecrets.png}
+  \includegraphics[width=0.9\linewidth]{images/DatabaseConfigurationManagedIdentity.png}
+  \caption{\label{Figure:DatabaseConfigurationManagedIdentity}Container App's Managed Identity}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\linewidth]{images/DatabaseConfigurationQuery.png}
+  \caption{\label{Figure:DatabaseConfigurationQuery}Database Roles Assignment}
+\end{figure}
+
+Different databases may have differing computation power and storage capacity, depending on the microservice's needs. Since the web \ac{API} is a proof-of-concept, all databases have 16 \acp{GB} of storage, to save costs. In terms of computation power, Quotation Service's database has 2 \acp{vCore}, while the other microservices' databases have the default 1 \ac{vCore}. This disparity is due to Quotation Service needing to store and lookup not only users' quotes, but also locations and special handling codes. Figure \ref{Figure:DatabaseConfigurationBase} shows the basic configuration properties of Quotation Service's database, which is similar to all others barring the number of \acp{vCore}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\linewidth]{images/DatabaseConfigurationBase.png}
+  \caption{\label{Figure:DatabaseConfigurationBase}SQL Databases Base Configuration}
+\end{figure}
+
+\subsection{Secret Storage Configuration}
+
+For security reasons, the source code of each microservice does not contain any secret values. Instead, Azure Key Vault is used to securely store confidential information for production environments, which is made available to the microservices through a private endpoint. The Key Vault stores the \ac{API} keys to authenticate with external carrier \acp{API}, the Service Bus connection string, and the secret to access Entra ID's resources. Figure \ref{Figure:KeyVaultSecrets} enumerates the names of all secrets.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{images/KeyVaultSecrets.png}
   \caption{\label{Figure:KeyVaultSecrets}Key Vault Secrets}
 \end{figure}
 
 \section{\texorpdfstring{\ac{CI/CD}}{CI/CD} Pipeline Configuration}
 
+The Code Repository, which is hosted on GitHub, includes a directory named ".github" containing all \ac{CI/CD} pipeline configuration files in the "workflows" subdirectory. Each workflow file is associated with a specific microservice. This directory also contains Shell script files in the "scripts" subdirectory that are used as part of the workflows. Figure \ref{Figure:GithubScriptsAndWorkflows} presents the structure of the ".github" directory.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\linewidth]{images/GithubScriptsAndWorkflows.png}
+  \caption{\label{Figure:GithubScriptsAndWorkflows}Github Scripts and Workflows}
+\end{figure}
+
+The workflow file related to Quotation Service will be explained, as an example. The workflows of the other microservices follow equivalent steps.
+
+The beginning of the workflow file defines its name, what conditions trigger its execution, and the environment variables it uses. This particular workflow is triggered when a change that affects either the "QuotationService" or "Shared" root directories is pushed to the master branch. The environment variables include Azure-related values and the name of the root folder of the microservice. Figure \ref{Figure:GithubWorkflowHeader} shows this part of the workflow file.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\linewidth]{images/GithubWorkflowHeader.png}
+  \caption{\label{Figure:GithubWorkflowHeader}Workflow Header}
+\end{figure}
+
+The latest version of Ubuntu is set as the \ac{OS} of the workflow runner. The first two steps of the workflow are preparatory and do not interact with Azure yet. The first step checks out the source code of the repository, making it available to the workflow runner. The second step sets up Docker functionality. Figure \ref{Figure:GithubWorkflowPreparation} shows these steps.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{images/GithubWorkflowPreparation.png}
+  \caption{\label{Figure:GithubWorkflowPreparation}Workflow Preparation Steps}
+\end{figure}
+
+\pagebreak
+
+The objectives of the subsequent two steps are building and pushing the new Docker image of the microservice to the Container Registry. The first step logs into the Container Registry using the "docker/login-action" action. This step uses Azure credentials stored in the repository's secrets to authenticate. The second step builds the Docker image according to the Dockerfile present in the directory of the microservice. Then, the workflow runner tags the Docker image with the current commit hash, and pushes it to the Container Registry. Figure \ref{Figure:GithubWorkflowContainerRegistry} shows these steps.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\linewidth]{images/GithubWorkflowContainerRegistry.png}
+  \caption{\label{Figure:GithubWorkflowContainerRegistry}Workflow Docker Build and Push Steps}
+\end{figure}
+
+The next step logs into the Azure account of the web \ac{API}'s resources, which is a prerequisite for the upcoming steps. To authenticate, it uses credentials stored in the repository's secrets. Figure \ref{Figure:GithubWorkflowAzureLogin} illustrates this step.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{images/GithubWorkflowAzureLogin.png}
+  \caption{\label{Figure:GithubWorkflowAzureLogin}Workflow Azure Login Step}
+\end{figure}
+
+Once the workflow runner logs into the Azure account, it executes the Shell script named "update-migration.job.sh". This script updates the Container App Job of the microservice to use the new Docker image. This is essential to ensure that the database migration is applied using the latest version of the microservice. Figure \ref{Figure:GithubWorkflowMigrationJobUpdate} shows this step.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{images/GithubWorkflowMigrationJobUpdate.png}
+  \caption{\label{Figure:GithubWorkflowMigrationJobUpdate}Workflow Migration Job Update Step}
+\end{figure}
+
+The following step executes the Shell script named "run-migration-job.sh". This script starts a new instance of the Container App Job, which applies any pending database migrations to the microservice's associated database. The script then waits for the job to complete successfully before proceeding by checking the execution status periodically. Figure \ref{Figure:GithubWorkflowMigrationJobExecution} shows this step.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{images/GithubWorkflowMigrationJobExecution.png}
+  \caption{\label{Figure:GithubWorkflowMigrationJobExecution}Workflow Migration Job Execution Step}
+\end{figure}
+
+The last step deploys the Docker image that was pushed to the Container Registry to the Container App associated with the microservice. This effectively updates the running instance of the microservice to the latest version. Figure \ref{Figure:GithubWorkflowContainerAppDeployment} shows this step.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\linewidth]{images/GithubWorkflowContainerAppDeployment.png}
+  \caption{\label{Figure:GithubWorkflowContainerAppDeployment}Workflow Container App Deployment Step}
+\end{figure}
+
 \chapter{Evaluation}
 \label{Chapter:Evaluation}
 \section{Testing Strategy}
 \label{Section:Testing_Strategy}
+
+Unit tests and integration tests are important to ensure the quality of the microservices' source code by verifying their correctness automatically. In the implemented web \ac{API}, unit tests aim to verify individual microservice components in isolation. On the other hand, integration tests focus on the communication with other microservices, cloud components, or external \acp{API}. Furthermore, testing can be added as a step of the CI/CD pipeline to ensure that changes do not introduce bugs.
+
+However, due to time constraints, the implementation of automated tests was not feasible. Therefore, the testing strategy for the web \ac{API} relied solely on manual testing. Manual testing was performed using Postman, as demonstrated in Section \ref{Section:Microservices_Implementation}. Postman was used to test all endpoints of the web \ac{API}, including various scenarios that encompassed valid requests, invalid requests, and edge cases. In addition, database records were inspected directly in the Azure Portal to verify that data was being stored as intended.
+
 \section{Performance Evaluation}
 \label{Section:Performance_Evaluation}
+
+\subsection{Performance Test Scenario}
+\label{Subsection:Performance_Test_Scenario}
+
+A performance evaluation was performed to analyze the responsiveness of the web \ac{API} under the conditions specified by Requirement \ref{Requirement:10}. To do so, a test scenario was designed and executed, with the goal of testing the base performance of the system.
+
+The test scenario consists of simulating 200 concurrent users send GET requests the "locations/\{id\}" endpoint. This involves 200 users sending requests simultaneously to the web \ac{API}, waiting for a response, and then immediately sending another request once a response is received. This process lasts for 3 minutes, with a previous warm-up period of 2 minutes. The warm-up period is important to allow the necessary microservice replicas to be created and initialized before real measurements are considered. The location identifier used all requests is "1234", which corresponds to an airport location stored in the database of Quotation Service. Neither the \ac{API} Gateway nor Quotation Service have any caching mechanism for endpoint requests, so that every request is processed from scratch.
+
+To satisfy Requirement \ref{Requirement:10}, the 90th percentile of response times must be under 500 milliseconds. This means that at least 90\% of all requests must receive a response in less than 500 milliseconds. Considering that the scenario involves 200 concurrent users, the web \ac{API} must be able to handle at least 400 requests of this type per second, on average. Equation \ref{Equation:Requests_Per_Second} shows how this value is calculated.
+
+\begin{equation}
+  \text{Requests (per second)} = \frac{\text{Concurrent users}}{\text{Response time (seconds)}}
+  \label{Equation:Requests_Per_Second}
+\end{equation}
+
+\subsection{Performance Test Setup and Configuration}
+
+The Azure Portal provides a service called "Azure Load Testing" that allows the creation and execution of performance test scenarios. This service was used to set up and run the performance test scenario described in Subsection \ref{Subsection:Performance_Test_Scenario}.
+
+The performance test is an Azure "URL-based test" where a specific public endpoint of the web \ac{API} is targeted. This \ac{URL} is shown in Figure \ref{Figure:LoadTestingRequestSpecification}, along with other configuration parameters.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\linewidth]{images/LoadTestingRequestSpecification.png}
+  \caption{\label{Figure:LoadTestingRequestSpecification}Performance Test Request Specification}
+\end{figure}
+
+Next, the load parameters are defined to match the scenario described in Subsection \ref{Subsection:Performance_Test_Scenario}. These parameters specify the test duration (5 minutes), the warm-up period (2 minutes), and the warm-up load pattern (linear). The test duration includes the warm-up period. Additionally, 2 parallel engine instances each handle 100 concurrent virtual users, for a total of 200. Figure \ref{Figure:LoadTestingLoadConfiguration} shows these parameters.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\linewidth]{images/LoadTestingLoadConfiguration.png}
+  \caption{\label{Figure:LoadTestingLoadConfiguration}Performance Test Load Configuration}
+\end{figure}
+
+To generate the desired plots and statistics, the performance test metrics must be specified. Although the most important metric is the total response time, a client-side metric that is collected by default, others are also useful. These include metrics related to the \ac{API} Gateway, the Quotation Service's Container App, and the SQL Database associated with Quotation Service. These additional metrics help understand how the system performs and identify which component is responsible for potential bottlenecks. Figure \ref{Figure:LoadTestingMetrics} shows all selected metrics.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\linewidth]{images/LoadTestingMetrics.png}
+  \caption{\label{Figure:LoadTestingMetrics}Performance Test Metrics}
+\end{figure}
+
+The "Capacity" metric of the API Gateway is an Azure metric for API Management instances. It combines \ac{CPU} usage, memory usage, and the queue length of incoming requests. This metric was chosen because more specific ones are only available in higher pricing tiers.
+
+More metrics may be selected later, even after the performance test has been executed. This is useful if the initial results warrant further analysis.
+
+\subsection{Performance Test Results and Analysis}
+\label{Subsection:Performance_Test_Results_and_Analysis}
+
 \section{Cost Analysis}
 \label{Section:Cost_Analysis}
+
+\pagebreak
+
 \section{Requirements Fulfillment}
 \label{Section:Requirements_Fulfillment}
+
+All requirements delineated in Section \ref{Section:Requirements} were fulfilled by the implemented web \ac{API}. Table \ref{Table:Requirements_Fulfillment} summarizes how each requirement was satisfied and in what subsections the relevant information can be found.
+
+\begin{longtable}{|c|m{280pt}|c|}
+
+  % The caption and label are moved inside the longtable environment.
+  \caption{Requirements Fulfillment Explanation}
+  \label{Table:Requirements_Fulfillment}                                                                                                                                                                                                                                                       \\
+
+  \hline
+  % This header appears on the first page.
+  \multicolumn{1}{|c|}{\textbf{Requirement}}
+   & \multicolumn{1}{c|}{\textbf{Fulfillment Explanation}}
+   & \multicolumn{1}{c|}{\textbf{Subsections}}
+  % \hline
+  \endfirsthead
+
+  % This header is repeated on all subsequent pages.
+  % \caption[]{(Continued) Requirements Fulfillment Explanation}                                                                                                                                                                                                                                                \\
+  \hline
+  \multicolumn{1}{|c|}{\textbf{Requirement}}
+   & \multicolumn{1}{c|}{\textbf{Fulfillment Explanation}}
+   & \multicolumn{1}{c|}{\textbf{Subsections}}                                                                                                                                                                                                                                                 \\
+  \hline
+  \endhead
+
+  % This footer appears on all pages except the last one.
+  \hline
+  \multicolumn{3}{r}{\textit{Continued on next page...}}                                                                                                                                                                                                                                       \\
+  \endfoot
+
+  \hline
+  \endlastfoot
+  \hline
+  \ref{Requirement:1}
+   & Quotation Service exposes an endpoint that takes a freight request. Quotation Service communicates with WebCargo Service or Cargofive Service to obtain freight rates from external \acp{API}. These rates are used to calculate and provide freight quotes to the end user.
+   & \ref{Subsection:Direct_Inter_Service_Communication}, \ref{Subsection:External_Carrier_API_Communication}, \ref{Subsection:Freight_Rates_And_Quotes_Obtainment}                                                                                                                            \\
+  \hline
+  \ref{Requirement:2}
+   & Whenever Quotation Service calculates freight quotes, it also stores the request and response data in its database. Users can retrieve their quotation history through a dedicated endpoint.
+   & \ref{Subsection:Quote_History}                                                                                                                                                                                                                                                            \\
+  \hline
+  \ref{Requirement:3}
+   & User Service uses authorization middleware to restrict access to the user search endpoint to only users with the "Administrator" role. User roles are stored in Entra ID and included in the access tokens it generates.
+   & \ref{Subsection:Middleware}, \ref{Subsection:RBAC}                                                                                                                                                                                                                                        \\
+  \hline
+  \ref{Requirement:4}
+   & Quotation Service provides an endpoint to search for airports and seaports.
+   & \ref{Subsection:Location_Search}                                                                                                                                                                                                                                                          \\
+  \hline
+  \ref{Requirement:5}
+   & User Service periodically polls Entra ID to check for deleted users. Upon user deletion, User Service sends a message batch to a Service Bus topic. Quotation Service subscribes to this topic and deletes the quote history of the deleted users.
+   & \ref{Subsection:Event_Driven_Inter_Service_Communication}, \ref{Subsection:User_Data_Deletion}                                                                                                                                                                                            \\
+  \hline
+  \ref{Requirement:6}
+   & The \ac{API} Gateway is responsible for authentication. It validates the access token for all endpoints whose functionality requires authentication. If the token is invalid or missing, the request is rejected.
+   & \ref{Subsection:Client_Server_Communication}, \ref{Subsection:API_Gateway_Configuration}                                                                                                                                                                                                  \\
+  \hline
+  \ref{Requirement:7}
+   & Each external carrier \ac{API} integration is associated with a specific microservice. This distributed nature ensures that if one microservice fails, the others remain operational because they run independently, despite their need for intercommunication.
+   & \ref{Subsection:External_Carrier_API_Communication}, \ref{Subsection:Microservice_Environment}                                                                                                                                                                                            \\
+  \hline
+  \ref{Requirement:8}
+   & Each microservice is deployed as a separate Azure Container App. Container Apps provide automatic scaling rules based on varying conditions. If a particular web \ac{API} is under high load, the corresponding Container App will scale up to handle the increased demand.
+   & \ref{Subsection:Microservice_Environment}                                                                                                                                                                                                                                                 \\
+  \hline
+  \ref{Requirement:9}
+   & WebCargo Service and Cargofive Service cache freight rates obtained from their respective external carrier \ac{API} for 1 day.
+   & \ref{Subsection:Freight_Rates_Cache}                                                                                                                                                                                                                                                      \\
+  \hline
+  \ref{Requirement:10}
+   & A performance test was conducted in Azure to evaluate the responsiveness of the web \ac{API}. The results demonstrated that the 90th percentile of response times was below 500 milliseconds for the conditions specified in this requirement.
+   & \ref{Subsection:Performance_Test_Scenario}, \ref{Subsection:Performance_Test_Results_and_Analysis}                                                                                                                                                                                        \\
+  \hline
+  \ref{Requirement:11}
+   & The \ac{API} Gateway is the only entry point for all client requests. The microservices reside in a subnet that prohibits traffic from the public internet. The remaining cloud components only allow traffic from private endpoints or through the Azure portal by cloud administrators.
+   & \ref{Subsection:Client_Server_Communication}, \ref{Subsection:API_Gateway_Configuration}, \ref{Subsection:Microservice_Environment_Configuration}                                                                                                                                         \\
+  \hline
+  \ref{Requirement:12}
+   & User Service delegates account management to Entra ID, which implements the \ac{OAuth} 2.0 and \ac{OIDC} protocols. Therefore, the web \ac{API} does not store any user credentials in its databases.
+   & \ref{Subsection:Identity_Provider}, \ref{Subsection:User_Data_Deletion}                                                                                                                                                                                                                   \\
+\end{longtable}
+
+
 
 \chapter{Conclusion}
 \label{Chapter:Conclusion}
