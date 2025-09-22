@@ -265,6 +265,7 @@ Write your abstract here in English.
 \begin{acronym}
   \acro{AI}{Artificial Intelligence}
   \acro{API}{Application Programming Interface}
+  \acro{AWS}{Amazon Web Services}
   \acro{CI/CD}{Continuous Integration/Continuous Delivery}
   \acro{CORS}{Cross-Origin Resource Sharing}
   \acro{CPU}{Central Processing Unit}
@@ -272,7 +273,9 @@ Write your abstract here in English.
   \acro{DNS}{Domain Name System}
   \acro{DSRM}{Design Science Research Methodology}
   \acro{DTO}{Data Transfer Object}
+  \acro{ECS}{Elastic Container Service}
   \acro{GB}{Gigabyte}
+  \acro{GCP}{Google Cloud Platform}
   \acro{HTTP}{Hypertext Transfer Protocol}
   \acro{HTTPS}{Hypertext Transfer Protocol Secure}
   \acro{IATA}{International Air Transport Association}
@@ -283,6 +286,7 @@ Write your abstract here in English.
   \acro{IS}{Information System}
   \acro{JSON}{JavaScript Object Notation}
   \acro{JWT}{JSON Web Token}
+  \acro{KB}{Kilobyte}
   \acro{LCL}{Less than Container Loaded}
   \acro{OAuth}{Open Authorization}
   \acro{OIDC}{OpenID Connect}
@@ -291,6 +295,7 @@ Write your abstract here in English.
   \acro{PaaS}{Platform as a Service}
   \acro{PRISMA}{Preferred Reporting Items for Systematic reviews and Meta-Analyses}
   \acro{RBAC}{Role-Based Access Control}
+  \acro{RDS}{Relational Database Service}
   \acro{REST}{Representational State Transfer}
   \acro{RPC}{Remote Procedure Call}
   \acro{SaaS}{Software as a Service}
@@ -604,6 +609,7 @@ The search query identified 756 documents. Upon filtering and deduplication, 65 
 \section{Further Research}
 \label{Further_Research}
 The 10 resulting documents gathered in Subsection \ref{Subsection:Search_Results} did not offer a comprehensive and varied view of web applications or web \acp{API}. Therefore, additional literature searches were conducted based on topics present in those 10 documents, namely Monolithic and Microservice Architectures, Cloud Computing, Authentication and Authorization, Containerization, and Web \ac{API} Frameworks.
+
 Furthermore, a literature search on freight forwarding was done to better understand the business domain of the web API that will be developed. To perform this further research, B-on, Google Scholar, and websites from authoritative sources were accessed.
 
 \chapter{Design and Architecture}
@@ -717,7 +723,7 @@ There are four microservices in this environment, which are considered major com
 
 \subsection{\texorpdfstring{\ac{VNet}}{VNet}}
 
-The \ac{VNet} provides network isolation for the system's components in the cloud platform. The Microservice Environment and the API Gateway reside in the \ac{VNet}, each in its dedicated subnet. The main objective of these dedicated subnets is to implement network segmentation, enforcing network policies that apply to all inbound and outbound traffic. Specifically, the \ac{API} Gateway subnet is configured to allow inbound traffic from the Internet, while the Microservice Environment subnet only accepts traffic from within the \ac{VNet}. Furthermore, components within the \ac{VNet} can securely access other components (the Message Broker, the Azure Key Vault, and the Data Persistence Layer) via private endpoints, which integrate them directly into the \ac{VNet}'s address space.
+The \ac{VNet} provides network isolation for the system's components in the cloud platform. The Microservice Environment and the API Gateway reside in the \ac{VNet}, each in its dedicated subnet. The main objective of these dedicated subnets is to implement network segmentation, enforcing network policies that apply to all inbound and outbound traffic. Specifically, the \ac{API} Gateway subnet is configured to allow inbound traffic from the Internet, while the Microservice Environment subnet only accepts traffic from within the \ac{VNet}. Furthermore, components within the \ac{VNet} can securely access other components (the Message Broker, the Secret Storage, and the Data Persistence Layer) via private endpoints, which integrate them directly into the \ac{VNet}'s address space.
 
 \subsection{Data Persistence Layer}
 
@@ -814,6 +820,7 @@ The web \ac{API} makes use of this type of communication when Quotation Service 
 Event-driven communication is applied in two scenarios using the Message Broker, as explained in Subsection \ref{Subsection:Message_Broker}.
 
 The first scenario occurs when a user deletes their account through the Identity Provider.
+
 Firstly, User Service must be informed about the deletion to propagate it to the rest of the system. To achieve this, it can either poll the Identity Provider periodically or subscribe to its user deletion notifications. Once User Service is informed, it publishes a "UserDeleted" event to the Message Broker containing the identifier of the deleted user. Finally, Quotation Service receives this event and deletes the quotation search history of the deleted user from its database. The user deletion event process is shown in Figure \ref{Figure:EventDrivenCommunicationUserDeleted}.
 
 \begin{figure}[H]
@@ -1229,7 +1236,7 @@ The Azure Container Apps Environment hosts all microservices as Azure Container 
   \caption{\label{Figure:ContainerAppsEnvironment}Container Apps Environment Configuration}
 \end{figure}
 
-Each microservice is deployed as a separate Container App. Each Container App runs a specific Docker image version stored in the Container Registry. When the \ac{CI/CD} pipeline deploys a new version of a microservice, it updates the Container App to use the new Docker image, creating a revision of the Container App. Microservices run in Docker containers of that image.
+Each microservice is deployed as a separate Container App. Each Container App runs a specific Docker image version stored in the Container Registry. When the \ac{CI/CD} pipeline deploys a new version of a microservice, it updates the Container App to use the new Docker image, creating a revision of the Container App. Microservices run in Docker containers of that image. Each microservice instance has general-purpose 0.5 \ac{CPU} cores and 1 \ac{GB} of memory allocated.
 
 Another valuable feature is the ability to set scaling rules for each microservice, which may be based on \ac{HTTP} traffic, \ac{CPU} usage, or memory usage. Specifically, every Container App is configured to scale between 1 and 10 instances, based on the average number of concurrent \ac{HTTP} requests being processed per instance. If this number exceeds 50, the Container App will automatically scale up to deal with the increased load. Conversely, if the average workload remains lower for 5 minutes, the Container App will scale down to conserve resources. Figure \ref{Figure:ContainerAppsScaling} shows the scaling configuration.
 
@@ -1258,7 +1265,7 @@ Figure \ref{Figure:DatabaseConfigurationQuery} demonstrates the subsequent step,
   \caption{\label{Figure:DatabaseConfigurationQuery}Database Roles Assignment}
 \end{figure}
 
-Different databases may have differing computation power and storage capacity, depending on the microservice's needs. Since the web \ac{API} is a proof-of-concept, all databases have 16 \acp{GB} of storage, to save costs. In terms of computation power, Quotation Service's database has 2 \acp{vCore}, while the other microservices' databases have the default 1 \ac{vCore}. This disparity is due to Quotation Service needing to store and lookup not only users' quotes, but also locations and special handling codes. Figure \ref{Figure:DatabaseConfigurationBase} shows the basic configuration properties of Quotation Service's database, which is similar to all others barring the number of \acp{vCore}.
+Different databases may have differing computation power and storage capacity, depending on the microservice's needs. All databases have 16 \acp{GB} of storage, to save costs. In terms of computation power, Quotation Service's database has 2 general-purpose \acp{vCore}, while the other microservices' databases have the default 1 \ac{vCore}. This disparity is due to the fact this database will be used in performance testing. Figure \ref{Figure:DatabaseConfigurationBase} shows the basic configuration properties of Quotation Service's database, which is similar to all others barring the number of \acp{vCore}.
 
 \begin{figure}[H]
   \centering
@@ -1407,8 +1414,97 @@ More metrics may be selected later, even after the performance test has been exe
 \subsection{Performance Test Results and Analysis}
 \label{Subsection:Performance_Test_Results_and_Analysis}
 
+\textbf{[Os testes já foram executados e os gráficos gerados. No entanto, devido a um problema técnico no Azure, esta subsecção ficará para mais tarde (nesta semana). O conteúdo desta secção será a análise dos gráficos de desempenho e as conclusões tiradas a partir dos mesmos.]}
+
 \section{Cost Analysis}
 \label{Section:Cost_Analysis}
+
+\subsection{Cost Analysis Context}
+\label{Subsection:Cost_Analysis_Context}
+
+Hosting software components in a cloud platform incurs costs. During the development of the web \ac{API}, free Azure subscriptions with limited budgets were used.
+
+Cloud platforms offer multiple pricing tiers for their cloud services. Pricing tiers focused on development and testing were selected to minimize costs while still providing the necessary features. However, these pricing tiers are not suitable for enterprise production environments, as they have lower limits in terms of performance, scalability, and availability.
+
+The goal of the cost analysis is to estimate the monthly cost of running the web \ac{API} in a real-world production environment. Each cloud platform has distinct pricing models for its services. This Section estimates and compares the cost of hosting the web \ac{API} in three major cloud platforms: Microsoft Azure, \ac{AWS}\footnote{Amazon Web Services, \url{https://aws.amazon.com/}, (accessed 21 Sep. 2025)}, and \ac{GCP}\footnote{Google Cloud Platform, \url{https://cloud.google.com/}, (accessed 21 Sep. 2025)}.
+
+To simplify, the cost analysis focuses on the most expensive components of the web \ac{API}. The most expensive components are the \ac{API} Gateway, the Microservice Environment, and the Data Persistence Layer. Together, they contribute to over 90\% of the total cost. This conclusion was reached by analyzing two primary sources: the official pricing documentation for each cloud provider, and the expenditure data from the development phase of the web \ac{API}.
+
+Table \ref{Table:CloudPlatformsServiceMapping} summarizes the mapping of web \ac{API} components to their respective cloud platform services considered for the cost analysis.
+
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{|l|m{90pt}|m{100pt}|c|}
+    \hline
+    \multicolumn{1}{|c|}{\textbf{Web \ac{API} Component}} & \multicolumn{1}{c|}{\textbf{Azure}} & \multicolumn{1}{c|}{\textbf{\ac{AWS}}} & \multicolumn{1}{c|}{\textbf{\ac{GCP}}} \\
+    \hline
+    \ac{API} Gateway                                      & API Management                      & API Gateway                            & API Gateway                            \\
+    \hline
+    Microservice Environment                              & Container Apps Environment          & \ac{ECS}                               & Cloud Run                              \\
+    \hline
+    Data Persistence Layer                                & SQL Server                          & \ac{RDS}                               & Cloud SQL                              \\
+    \hline
+  \end{tabular}
+  \vspace{10pt}
+  \caption{Cloud Platform Service Mapping}
+  \label{Table:CloudPlatformsServiceMapping}
+\end{table}
+
+\subsection{Cost Analysis Parameters}
+\label{Subsection:Cost_Analysis_Parameters}
+
+The total cost of hosting the web \ac{API} depends on various parameters. Therefore, it is difficult to estimate the cost accurately. Still, the parameters were selected based on the the requirements defined in Section \ref{Section:Requirements} and mid-tier pricing plans on the cloud platforms.
+
+Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered in the cost analysis, along with the rationale behind their values.
+
+\begin{longtable}{|c|c|m{280pt}|}
+
+  \caption{Cost Analysis Parameters}
+  \label{Table:Cost_Analysis_Parameters}                                                                                                                                                                                                                                                                                                                                    \\
+
+  \hline
+  \multicolumn{1}{|c|}{\textbf{Parameter}}
+   & \multicolumn{1}{c|}{\textbf{Value}}
+   & \multicolumn{1}{c|}{\textbf{Rationale}}
+  \endfirsthead
+
+  \hline
+  \multicolumn{1}{|c|}{\textbf{Parameter}}
+   & \multicolumn{1}{c|}{\textbf{Value}}
+   & \multicolumn{1}{c|}{\textbf{Rationale}}                                                                                                                                                                                                                                                                                                                                \\
+  \hline
+  \endhead
+
+  \hline
+  \multicolumn{3}{r}{\textit{Continued on the next page...}}                                                                                                                                                                                                                                                                                                                \\
+  \endfoot
+
+  \hline
+  \endlastfoot
+  \hline
+  Monthly API Requests
+   & 100 million
+   & Represents 38.6 user requests per second, on average. This value considers the performance test described in Section \ref{Section:Performance_Evaluation}, where the web \ac{API} dealt with 400 requests per second. However, that value is intended to represent a surge in traffic, and does not take into account quotation requests, which are much more complex. \\
+  \hline
+  Monthly Data Egress
+   & 500 \ac{GB}
+   & Considering value of the "Monthly API Requests" parameter, this amounts to an average of 5 \ac{KB} per request response. The size of the response delivered to users varies heavily, ranging from less than 1 \ac{KB} for some requests, to more than 100 \ac{KB} for some quote history requests. 5 \ac{KB} represents a typical quote request response size.         \\
+  \hline
+  Number of Microservices
+   & 4
+   & As implemented in the web \ac{API}.                                                                                                                                                                                                                                                                                                                                    \\
+  \hline
+  Deployment Region
+   & Spain
+   & Cheaper than most other European regions.                                                                                                                                                                                                                                                                                                                              \\
+  \hline
+  Traffic Origin
+   & Europe
+   & Applies to all requests, to simplify analysis.                                                                                                                                                                                                                                                                                                                         \\
+\end{longtable}
+
+\subsection{Cost Analysis Results}
+\label{Subsection:Cost_Analysis_Results}
 
 \pagebreak
 
@@ -1419,20 +1515,15 @@ All requirements delineated in Section \ref{Section:Requirements} were fulfilled
 
 \begin{longtable}{|c|m{280pt}|c|}
 
-  % The caption and label are moved inside the longtable environment.
   \caption{Requirements Fulfillment Explanation}
   \label{Table:Requirements_Fulfillment}                                                                                                                                                                                                                                                       \\
 
   \hline
-  % This header appears on the first page.
   \multicolumn{1}{|c|}{\textbf{Requirement}}
    & \multicolumn{1}{c|}{\textbf{Fulfillment Explanation}}
    & \multicolumn{1}{c|}{\textbf{Subsections}}
-  % \hline
   \endfirsthead
 
-  % This header is repeated on all subsequent pages.
-  % \caption[]{(Continued) Requirements Fulfillment Explanation}                                                                                                                                                                                                                                                \\
   \hline
   \multicolumn{1}{|c|}{\textbf{Requirement}}
    & \multicolumn{1}{c|}{\textbf{Fulfillment Explanation}}
@@ -1440,9 +1531,8 @@ All requirements delineated in Section \ref{Section:Requirements} were fulfilled
   \hline
   \endhead
 
-  % This footer appears on all pages except the last one.
   \hline
-  \multicolumn{3}{r}{\textit{Continued on next page...}}                                                                                                                                                                                                                                       \\
+  \multicolumn{3}{r}{\textit{Continued on the next page...}}                                                                                                                                                                                                                                   \\
   \endfoot
 
   \hline
@@ -1501,8 +1591,10 @@ All requirements delineated in Section \ref{Section:Requirements} were fulfilled
 
 \chapter{Conclusion}
 \label{Chapter:Conclusion}
+
 \section{Dissertation Summary}
 \label{Section:Dissertation_Summary}
+
 \section{Answering the Research Questions}
 \label{Section:Answering_the_Research_Questions}
 
@@ -1515,6 +1607,11 @@ All requirements delineated in Section \ref{Section:Requirements} were fulfilled
 
 \section{Limitations}
 \label{Section:Limitations}
+
+% The proposed solution has multiple limitations.
+
+% First, the development lifecycle was supposed to be acompanied by the business partner Devlop, but the company was only partially present. Although Devlop did offer initial guidance and provided the \ac{API} keys to access the external carrier \acp{API}, they were unavailable for the majority of the development phase. This absence led to somewhat arbitrary requirements (defined in Section \ref{Section:Requirements}), that guided the design and implementation of the web \ac{API}.
+
 \section{Future Work}
 \label{Section:Future_Work}
 
