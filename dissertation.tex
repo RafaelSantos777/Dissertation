@@ -122,7 +122,7 @@
 %
 \numberwithin{table}{chapter}
 \numberwithin{figure}{chapter}
-
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
 \definecolor{MyDarkBlue}{rgb}{0,0.08,0.45}
 \makeatletter
 \def\cleardoublepage{\clearpage\if@twoside%
@@ -304,7 +304,7 @@ Write your abstract here in English.
   \acro{SQL}{Structured Query Language}
   \acro{UI}{User Interface}
   \acro{URL}{Uniform Resource Locator}
-  \acro{vCore}{Virtual Core}
+  \acro{vCPU}{Virtual Central Processing Unit}
   \acro{VNet}{Virtual Network}
   \acro{VM}{Virtual Machine}
   \acro{XML}{eXtensible Markup Language}
@@ -718,7 +718,7 @@ There are four microservices in this environment, which are considered major com
   \item[User Service] This service provides endpoints to retrieve user-related information. To do so, it communicates with the Identity Provider. It also communicates with the Identity Provider to be informed about user deletions, which it propagates to the rest of the system through the Message Broker. Even though User Service does not store user data, it still needs an associated database to store data related to the Identity Provider. The purpose of this data will be explained in Chapter \ref{Chapter:Implementation}.
   \item[Quotation Service] This service orchestrates the core freight quotation business logic. It communicates with WebCargo Service and Cargofive Service to obtain freight rates and uses them to calculate and store freight quotes based on user input received through the \ac{API} Gateway. Users can fill a freight quote request and obtain a response with a freight quote, as well as retrieve their quote history. Quotation Service also stores data relevant to the general quotation process, including locations (airports and seaports), special handling codes, and cargo container types. This general data is anonymously accessible through endpoints.
   \item[WebCargo Service] This service is responsible for all business logic related to the WebCargo external \ac{API}, which is used to obtain up-to-date air freight rates. It extracts all relevant information present in the freight rates retrieved from the WebCargo \ac{API} and stores them in the corresponding database. Most importantly, it provides air freight rates to Quotation Service when requested.
-  \item[Cargofive Service] Analogously to the WebCargo Service, this service is responsible for all business logic related to the Cargofive external \ac{API}, which is used to obtain up-to-date sea freight rates. It extracts all relevant information present in the freight rates retrieved from the Cargofive \ac{API} and stores them in the corresponding database. Most importantly, it provides sea freight rates to Quotation Service when requested.
+  \item[Cargofive Service] Analogously to the WebCargo Service, this service interacts with the Cargofive external \ac{API} to fetch current sea freight rates. It extracts all relevant information present in the retrieved freight rates and stores them in its associated database. Its defining role is to supply freight rate data to Quotation Service upon request.
 \end{description}
 
 \subsection{\texorpdfstring{\ac{VNet}}{VNet}}
@@ -936,7 +936,7 @@ The selected cloud platform is Microsoft Azure\footnote{Microsoft Azure, \url{ht
 
 \begin{table}[h!]
   \centering
-  \begin{tabular}{|l|l|}
+  \begin{tabular}{|c|c|}
     \hline
     \multicolumn{1}{|c|}{\textbf{Web \ac{API} Component}} & \multicolumn{1}{c|}{\textbf{Azure Service}} \\
     \hline
@@ -1236,7 +1236,7 @@ The Azure Container Apps Environment hosts all microservices as Azure Container 
   \caption{\label{Figure:ContainerAppsEnvironment}Container Apps Environment Configuration}
 \end{figure}
 
-Each microservice is deployed as a separate Container App. Each Container App runs a specific Docker image version stored in the Container Registry. When the \ac{CI/CD} pipeline deploys a new version of a microservice, it updates the Container App to use the new Docker image, creating a revision of the Container App. Microservices run in Docker containers of that image. Each microservice instance has general-purpose 0.5 \ac{CPU} cores and 1 \ac{GB} of memory allocated.
+Each microservice is deployed as a separate Container App. Each Container App runs a specific Docker image version stored in the Container Registry. When the \ac{CI/CD} pipeline deploys a new version of a microservice, it updates the Container App to use the new Docker image, creating a revision of the Container App. Microservices run in Docker containers of that image. Each microservice instance has 0.5 general-purpose \acp{vCPU} and 1 \ac{GB} of memory allocated.
 
 Another valuable feature is the ability to set scaling rules for each microservice, which may be based on \ac{HTTP} traffic, \ac{CPU} usage, or memory usage. Specifically, every Container App is configured to scale between 1 and 10 instances, based on the average number of concurrent \ac{HTTP} requests being processed per instance. If this number exceeds 50, the Container App will automatically scale up to deal with the increased load. Conversely, if the average workload remains lower for 5 minutes, the Container App will scale down to conserve resources. Figure \ref{Figure:ContainerAppsScaling} shows the scaling configuration.
 
@@ -1265,7 +1265,7 @@ Figure \ref{Figure:DatabaseConfigurationQuery} demonstrates the subsequent step,
   \caption{\label{Figure:DatabaseConfigurationQuery}Database Roles Assignment}
 \end{figure}
 
-Different databases may have differing computation power and storage capacity, depending on the microservice's needs. All databases have 16 \acp{GB} of storage, to save costs. In terms of computation power, Quotation Service's database has 2 general-purpose \acp{vCore}, while the other microservices' databases have the default 1 \ac{vCore}. This disparity is due to the fact this database will be used in performance testing. Figure \ref{Figure:DatabaseConfigurationBase} shows the basic configuration properties of Quotation Service's database, which is similar to all others barring the number of \acp{vCore}.
+Different databases may have differing computation power and storage capacity, depending on the microservice's needs. All databases have 16 \acp{GB} of storage, to save costs. In terms of computation power, Quotation Service's database has 2 general-purpose \acp{vCPU}, while the other microservices' databases have the default 1 \ac{vCPU}. This disparity is due to the fact this database will be used in performance testing. Figure \ref{Figure:DatabaseConfigurationBase} shows the basic configuration properties of Quotation Service's database, which is similar to all others barring the number of \acp{vCPU}.
 
 \begin{figure}[H]
   \centering
@@ -1428,13 +1428,13 @@ Cloud platforms offer multiple pricing tiers for their cloud services. Pricing t
 
 The goal of the cost analysis is to estimate the monthly cost of running the web \ac{API} in a real-world production environment. Each cloud platform has distinct pricing models for its services. This Section estimates and compares the cost of hosting the web \ac{API} in three major cloud platforms: Microsoft Azure, \ac{AWS}\footnote{Amazon Web Services, \url{https://aws.amazon.com/}, (accessed 21 Sep. 2025)}, and \ac{GCP}\footnote{Google Cloud Platform, \url{https://cloud.google.com/}, (accessed 21 Sep. 2025)}.
 
-To simplify, the cost analysis focuses on the most expensive components of the web \ac{API}. The most expensive components are the \ac{API} Gateway, the Microservice Environment, and the Data Persistence Layer. Together, they contribute to over 90\% of the total cost. This conclusion was reached by analyzing two primary sources: the official pricing documentation for each cloud provider, and the expenditure data from the development phase of the web \ac{API}.
+To simplify, the cost analysis focuses on the most expensive components of the web \ac{API}. The most expensive components are the \ac{API} Gateway, the Microservice Environment, and the Data Persistence Layer. Together, they contribute to over 90\% of the total cost. This conclusion was reached by examining two main sources: the official pricing documentation for each cloud provider, and the expenditure data from the development phase of the web \ac{API}.
 
 Table \ref{Table:CloudPlatformsServiceMapping} summarizes the mapping of web \ac{API} components to their respective cloud platform services considered for the cost analysis.
 
 \begin{table}[h!]
   \centering
-  \begin{tabular}{|l|m{90pt}|m{100pt}|c|}
+  \begin{tabular}{|M{135pt}|M{80pt}|M{80pt}|M{80pt}|}
     \hline
     \multicolumn{1}{|c|}{\textbf{Web \ac{API} Component}} & \multicolumn{1}{c|}{\textbf{Azure}} & \multicolumn{1}{c|}{\textbf{\ac{AWS}}} & \multicolumn{1}{c|}{\textbf{\ac{GCP}}} \\
     \hline
@@ -1442,7 +1442,7 @@ Table \ref{Table:CloudPlatformsServiceMapping} summarizes the mapping of web \ac
     \hline
     Microservice Environment                              & Container Apps Environment          & \ac{ECS}                               & Cloud Run                              \\
     \hline
-    Data Persistence Layer                                & SQL Server                          & \ac{RDS}                               & Cloud SQL                              \\
+    Data Persistence Layer                                & SQL Server                          & \ac{RDS} for SQL Server                & Cloud SQL                              \\
     \hline
   \end{tabular}
   \vspace{10pt}
@@ -1457,10 +1457,12 @@ The total cost of hosting the web \ac{API} depends on various parameters. Theref
 
 Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered in the cost analysis, along with the rationale behind their values.
 
-\begin{longtable}{|c|c|m{280pt}|}
+\pagebreak
+
+\begin{longtable}{|M{70pt}|M{55pt}|m{300pt}|}
 
   \caption{Cost Analysis Parameters}
-  \label{Table:Cost_Analysis_Parameters}                                                                                                                                                                                                                                                                                                                                    \\
+  \label{Table:Cost_Analysis_Parameters}                                                                                                                                                                                                                                                                                                                                                                                                                                    \\
 
   \hline
   \multicolumn{1}{|c|}{\textbf{Parameter}}
@@ -1471,12 +1473,12 @@ Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered i
   \hline
   \multicolumn{1}{|c|}{\textbf{Parameter}}
    & \multicolumn{1}{c|}{\textbf{Value}}
-   & \multicolumn{1}{c|}{\textbf{Rationale}}                                                                                                                                                                                                                                                                                                                                \\
+   & \multicolumn{1}{c|}{\textbf{Rationale}}                                                                                                                                                                                                                                                                                                                                                                                                                                \\
   \hline
   \endhead
 
   \hline
-  \multicolumn{3}{r}{\textit{Continued on the next page...}}                                                                                                                                                                                                                                                                                                                \\
+  \multicolumn{3}{r}{\textit{Continued on the next page...}}                                                                                                                                                                                                                                                                                                                                                                                                                \\
   \endfoot
 
   \hline
@@ -1484,23 +1486,43 @@ Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered i
   \hline
   Monthly API Requests
    & 100 million
-   & Represents 38.6 user requests per second, on average. This value considers the performance test described in Section \ref{Section:Performance_Evaluation}, where the web \ac{API} dealt with 400 requests per second. However, that value is intended to represent a surge in traffic, and does not take into account quotation requests, which are much more complex. \\
+   & Represents 38.6 user requests per second, on average. This value considers the performance test described in Section \ref{Section:Performance_Evaluation}, where the web \ac{API} dealt with 400 requests per second. However, that value is intended to represent a surge in traffic, and does not take into account quotation requests, which are much more complex. Therefore, a much lower value was chosen.                                                       \\
   \hline
   Monthly Data Egress
-   & 500 \ac{GB}
-   & Considering value of the "Monthly API Requests" parameter, this amounts to an average of 5 \ac{KB} per request response. The size of the response delivered to users varies heavily, ranging from less than 1 \ac{KB} for some requests, to more than 100 \ac{KB} for some quote history requests. 5 \ac{KB} represents a typical quote request response size.         \\
+   & 500 GB
+   & Considering value of the "Monthly API Requests" parameter, this amounts to an average of 5 \ac{KB} per request response. The size of the responses delivered to users varies heavily, ranging from less than 1 \ac{KB}, to more than 100 \ac{KB} for some quote history requests. 5 \ac{KB} represents a typical quote request response size.                                                                                                                          \\
   \hline
   Number of Microservices
    & 4
-   & As implemented in the web \ac{API}.                                                                                                                                                                                                                                                                                                                                    \\
+   & As implemented in the web \ac{API}.                                                                                                                                                                                                                                                                                                                                                                                                                                    \\
+  \hline
+  Microservice CPU
+   & 1 \ac{vCPU} (each)
+   & This value represents the average \ac{CPU} utilization of all instances (replicas) of a microservice combined. In the implemented web \ac{API}, each instance is allocated 0.5 \acp{vCPU}. Therefore, the value of this parameter assumes that the average \ac{CPU} utilization is equivalent to 2 instances running at full capacity. All chosen \acp{vCPU} belong to a general-purpose tier, although their processing power may still vary between cloud providers. \\
+  \hline
+  Microservice Memory
+   & 2 GB (each)
+   & Similarly to the "Microservice CPU" parameter, this value refers to the average memory utilization combining all instances (replicas) of a microservice. In the web \ac{API}, each instance has 1 \ac{GB} of memory. Thus, it is assumed that the average memory use is identical to 2 instances running at full capacity.                                                                                                                                             \\
+  \hline
+  Number of Databases
+   & 3
+   & User Service's database has extremely low resource requirements. Therefore, only Quotation Service, WebCargo Service, and Cargofive Service's databases were considered.                                                                                                                                                                                                                                                                                               \\
+  \hline
+  Database CPU
+   & 16 \acp{vCPU} (each)
+   & It is difficult to predict the necessary \ac{CPU} resources for the databases due to varying query complexities and usage patterns. Quotation requests involve more resource-intensive queries than the ones used in the performance test, so more than 2 \acp{vCPU} were selected. The value of this parameter is also associated with mid-tier options in cloud provider offerings.                                                                                  \\
+  \hline
+  Database Storage
+   & 128 GB (each)
+   & The database storage requirements are hard to predict without real usage data. This value coincides with mid-tier options in cloud provider offerings.                                                                                                                                                                                                                                                                                                                 \\
   \hline
   Deployment Region
    & Spain
-   & Cheaper than most other European regions.                                                                                                                                                                                                                                                                                                                              \\
+   & Cheaper than most other European regions.                                                                                                                                                                                                                                                                                                                                                                                                                              \\
   \hline
-  Traffic Origin
+  User Traffic Origin
    & Europe
-   & Applies to all requests, to simplify analysis.                                                                                                                                                                                                                                                                                                                         \\
+   & Applies to all requests, to simplify analysis.                                                                                                                                                                                                                                                                                                                                                                                                                         \\
 \end{longtable}
 
 \subsection{Cost Analysis Results}
@@ -1513,7 +1535,9 @@ Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered i
 
 All requirements delineated in Section \ref{Section:Requirements} were fulfilled by the implemented web \ac{API}. Table \ref{Table:Requirements_Fulfillment} summarizes how each requirement was satisfied and in what subsections the relevant information can be found.
 
-\begin{longtable}{|c|m{280pt}|c|}
+\begingroup
+\centering
+\begin{longtable}{|c|m{280pt}|M{65pt}|}
 
   \caption{Requirements Fulfillment Explanation}
   \label{Table:Requirements_Fulfillment}                                                                                                                                                                                                                                                       \\
@@ -1586,7 +1610,7 @@ All requirements delineated in Section \ref{Section:Requirements} were fulfilled
    & User Service delegates account management to Entra ID, which implements the \ac{OAuth} 2.0 and \ac{OIDC} protocols. Therefore, the web \ac{API} does not store any user credentials in its databases.
    & \ref{Subsection:Identity_Provider}, \ref{Subsection:User_Data_Deletion}                                                                                                                                                                                                                   \\
 \end{longtable}
-
+\endgroup
 
 
 \chapter{Conclusion}
@@ -1610,7 +1634,7 @@ All requirements delineated in Section \ref{Section:Requirements} were fulfilled
 
 % The proposed solution has multiple limitations.
 
-% First, the development lifecycle was supposed to be acompanied by the business partner Devlop, but the company was only partially present. Although Devlop did offer initial guidance and provided the \ac{API} keys to access the external carrier \acp{API}, they were unavailable for the majority of the development phase. This absence led to somewhat arbitrary requirements (defined in Section \ref{Section:Requirements}), that guided the design and implementation of the web \ac{API}.
+% First, the development lifecycle was supposed to be accompanied by the business partner Devlop, but the company was only partially involved. Although Devlop did offer initial guidance and provided the \ac{API} keys to access the external carrier \acp{API}, the company was unavailable for the majority of the development phase. This absence led to somewhat arbitrary software requirements (defined in Section \ref{Section:Requirements}), that guided the design and implementation of the web \ac{API}.
 
 \section{Future Work}
 \label{Section:Future_Work}
