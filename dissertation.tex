@@ -1363,60 +1363,6 @@ Unit tests and integration tests are important to ensure the quality of the micr
 
 However, due to time constraints, the implementation of automated tests was not feasible. Therefore, the testing strategy for the web \ac{API} relied solely on manual testing. Manual testing was performed using Postman, as demonstrated in Section \ref{Section:Microservices_Implementation}. Postman was used to test all endpoints of the web \ac{API}, including various scenarios that encompassed valid requests, invalid requests, and edge cases. In addition, database records were inspected directly in the Azure Portal to verify that data was being stored as intended.
 
-\section{Performance Evaluation}
-\label{Section:Performance_Evaluation}
-
-\subsection{Performance Test Scenario}
-\label{Subsection:Performance_Test_Scenario}
-
-A performance evaluation was performed to analyze the responsiveness of the web \ac{API} under the conditions specified by Requirement \ref{Requirement:10}. To do so, a test scenario was designed and executed, with the goal of testing the base performance of the system.
-
-The test scenario consists of simulating 200 concurrent users send GET requests the "locations/\{id\}" endpoint. This involves 200 users sending requests simultaneously to the web \ac{API}, waiting for a response, and then immediately sending another request once a response is received. This process lasts for 3 minutes, with a previous warm-up period of 2 minutes. The warm-up period is important to allow the necessary microservice replicas to be created and initialized before real measurements are considered. The location identifier used all requests is "1234", which corresponds to an airport location stored in the database of Quotation Service. Neither the \ac{API} Gateway nor Quotation Service have any caching mechanism for endpoint requests, so that every request is processed from scratch.
-
-To satisfy Requirement \ref{Requirement:10}, the 90th percentile of response times must be under 500 milliseconds. This means that at least 90\% of all requests must receive a response in less than 500 milliseconds. Considering that the scenario involves 200 concurrent users, the web \ac{API} must be able to handle at least 400 requests of this type per second, on average. Equation \ref{Equation:Requests_Per_Second} shows how this value is calculated.
-
-\begin{equation}
-  \text{Requests (per second)} = \frac{\text{Concurrent users}}{\text{Response time (seconds)}}
-  \label{Equation:Requests_Per_Second}
-\end{equation}
-
-\subsection{Performance Test Setup and Configuration}
-
-The Azure Portal provides a service called "Azure Load Testing" that allows the creation and execution of performance test scenarios. This service was used to set up and run the performance test scenario described in Subsection \ref{Subsection:Performance_Test_Scenario}.
-
-The performance test is an Azure "URL-based test" where a specific public endpoint of the web \ac{API} is targeted. This \ac{URL} is shown in Figure \ref{Figure:LoadTestingRequestSpecification}, along with other configuration parameters.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=1\linewidth]{images/LoadTestingRequestSpecification.png}
-  \caption{\label{Figure:LoadTestingRequestSpecification}Performance Test Request Specification}
-\end{figure}
-
-Next, the load parameters are defined to match the scenario described in Subsection \ref{Subsection:Performance_Test_Scenario}. These parameters specify the test duration (5 minutes), the warm-up period (2 minutes), and the warm-up load pattern (linear). The test duration includes the warm-up period. Additionally, 2 parallel engine instances each handle 100 concurrent virtual users, for a total of 200. Figure \ref{Figure:LoadTestingLoadConfiguration} shows these parameters.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.9\linewidth]{images/LoadTestingLoadConfiguration.png}
-  \caption{\label{Figure:LoadTestingLoadConfiguration}Performance Test Load Configuration}
-\end{figure}
-
-To generate the desired plots and statistics, the performance test metrics must be specified. Although the most important metric is the total response time, a client-side metric that is collected by default, others are also useful. These include metrics related to the \ac{API} Gateway, the Quotation Service's Container App, and the SQL Database associated with Quotation Service. These additional metrics help understand how the system performs and identify which component is responsible for potential bottlenecks. Figure \ref{Figure:LoadTestingMetrics} shows all selected metrics.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=1\linewidth]{images/LoadTestingMetrics.png}
-  \caption{\label{Figure:LoadTestingMetrics}Performance Test Metrics}
-\end{figure}
-
-The "Capacity" metric of the API Gateway is an Azure metric for API Management instances. It combines \ac{CPU} usage, memory usage, and the queue length of incoming requests. This metric was chosen because more specific ones are only available in higher pricing tiers.
-
-More metrics may be selected later, even after the performance test has been executed. This is useful if the initial results warrant further analysis.
-
-\subsection{Performance Test Results and Analysis}
-\label{Subsection:Performance_Test_Results_and_Analysis}
-
-\textbf{[Os testes já foram executados e os gráficos gerados. No entanto, devido a um problema técnico no Azure, esta subsecção ficará para mais tarde (nesta semana). O conteúdo desta secção será a análise dos gráficos de desempenho e as conclusões tiradas a partir dos mesmos.]}
-
 \section{Cost Analysis}
 \label{Section:Cost_Analysis}
 
@@ -1457,8 +1403,6 @@ Table \ref{Table:CloudPlatformsServiceMapping} summarizes the mapping of web \ac
 The total cost of hosting the web \ac{API} depends on various parameters. Therefore, it is difficult to estimate the cost accurately. Still, the parameters were selected based on the the requirements defined in Section \ref{Section:Requirements}, the results of the performance test in Subsection \ref{Subsection:Performance_Test_Results_and_Analysis}, and mid-tier pricing plans on the cloud platforms.
 
 Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered in the cost analysis, along with the rationale behind their values.
-
-\pagebreak
 
 \begin{longtable}{|M{70pt}|M{55pt}|m{300pt}|}
 
@@ -1538,7 +1482,10 @@ Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered i
    & Europe
    & Applies to all requests, to simplify analysis.                                                                                                                                                                                                                                                                                                                                                                                                                                      \\
 \end{longtable}
-\subsection{Cost Analysis Selected Pricing Options}
+
+\subsection{Cost Analysis Pricing Options}
+\label{Subsection:Cost_Analysis_Pricing_Options}
+
 The cheapest pricing tiers and options that satisfy all parameters and allow for uninterrupted service execution were selected for each cloud service. Table \ref{Table:Cost_Analysis_Selected_Options} shows the selected pricing options for each cloud service, per cloud platform.
 
 \begin{table}[h!]
@@ -1562,7 +1509,7 @@ The cheapest pricing tiers and options that satisfy all parameters and allow for
 \subsection{Cost Analysis Results}
 \label{Subsection:Cost_Analysis_Results}
 
-Considering the parameters and pricing options defined in Subsection \ref{Subsection:Cost_Analysis_Parameters}, the estimated monthly cost of hosting the web \ac{API} in each cloud platform was calculated. Table \ref{Table:Cost_Analysis_Results} indicates the results in Euros.
+Considering the parameters and pricing options defined in Subsections \ref{Subsection:Cost_Analysis_Parameters} and \ref{Subsection:Cost_Analysis_Pricing_Options}, the estimated monthly cost of hosting the web \ac{API} in each cloud platform was calculated. Table \ref{Table:Cost_Analysis_Results} shows the results, in Euros.
 
 \begin{table}[H]
   \centering
@@ -1582,7 +1529,65 @@ Considering the parameters and pricing options defined in Subsection \ref{Subsec
   \label{Table:Cost_Analysis_Results}
 \end{table}
 
-The results indicate that \ac{AWS} is the cheapest cloud platform to host the web \ac{API}, with an estimated monthly cost of 1,106.88 \euro. The most expensive option is Microsoft Azure, with 1,480.38 \euro. This higher cost is mainly due to the \ac{API} Gateway, which requires a more expensive pricing tier to support \ac{VNet} integration. In-between is \ac{GCP}, with an estimated monthly cost of 1,207.01 \euro.
+The results indicate that \ac{AWS} is the cheapest cloud platform to host the web \ac{API}, with an estimated monthly cost of 1,106.88 \euro. The most expensive option is Microsoft Azure, with 1,480.38 \euro per month. \ac{GCP} is positioned between the two with an estimated monthly cost of 1,207.01 \euro. The higher cost associated with Azure is mainly due to its \ac{API} Gateway requiring a more expensive pricing tier to support \ac{VNet} integration.
+
+\pagebreak
+
+\section{Performance Evaluation}
+\label{Section:Performance_Evaluation}
+
+\subsection{Performance Test Scenario}
+\label{Subsection:Performance_Test_Scenario}
+
+A performance evaluation was performed to analyze the responsiveness of the web \ac{API} under the conditions specified by Requirement \ref{Requirement:10}. To do so, a test scenario was designed and executed, with the goal of testing the base performance of the system.
+
+The test scenario consists of simulating 200 concurrent users send GET requests the "locations/\{id\}" endpoint. This involves 200 users sending requests simultaneously to the web \ac{API}, waiting for a response, and then immediately sending another request once a response is received. This process lasts for 3 minutes, with a previous warm-up period of 2 minutes. The warm-up period is important to allow the necessary microservice replicas to be created and initialized before real measurements are considered. The location identifier used all requests is "1234", which corresponds to an airport location stored in the database of Quotation Service. Neither the \ac{API} Gateway nor Quotation Service have any caching mechanism for endpoint requests, so that every request is processed from scratch.
+
+To satisfy Requirement \ref{Requirement:10}, the 90th percentile of response times must be under 500 milliseconds. This means that at least 90\% of all requests must receive a response in less than 500 milliseconds. Considering that the scenario involves 200 concurrent users, the web \ac{API} must be able to handle at least 400 requests of this type per second, on average. Equation \ref{Equation:Requests_Per_Second} shows how this value is calculated.
+
+\begin{equation}
+  \text{Requests (per second)} = \frac{\text{Concurrent users}}{\text{Response time (seconds)}}
+  \label{Equation:Requests_Per_Second}
+\end{equation}
+
+\subsection{Performance Test Setup and Configuration}
+
+The Azure Portal provides a service called "Azure Load Testing" that allows the creation and execution of performance test scenarios. This service was used to set up and run the performance test scenario described in Subsection \ref{Subsection:Performance_Test_Scenario}.
+
+The performance test is an Azure "URL-based test" where a specific public endpoint of the web \ac{API} is targeted. This \ac{URL} is shown in Figure \ref{Figure:LoadTestingRequestSpecification}, along with other configuration parameters.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\linewidth]{images/LoadTestingRequestSpecification.png}
+  \caption{\label{Figure:LoadTestingRequestSpecification}Performance Test Request Specification}
+\end{figure}
+
+Next, the load parameters are defined to match the scenario described in Subsection \ref{Subsection:Performance_Test_Scenario}. These parameters specify the test duration (5 minutes), the warm-up period (2 minutes), and the warm-up load pattern (linear). The test duration includes the warm-up period. Additionally, 2 parallel engine instances each handle 100 concurrent virtual users, for a total of 200. Figure \ref{Figure:LoadTestingLoadConfiguration} shows these parameters.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\linewidth]{images/LoadTestingLoadConfiguration.png}
+  \caption{\label{Figure:LoadTestingLoadConfiguration}Performance Test Load Configuration}
+\end{figure}
+
+To generate the desired plots and statistics, the performance test metrics must be specified. Although the most important metric is the total response time, a client-side metric that is collected by default, others are also useful. These include metrics related to the \ac{API} Gateway, the Quotation Service's Container App, and the SQL Database associated with Quotation Service. These additional metrics help understand how the system performs and identify which component is responsible for potential bottlenecks. Figure \ref{Figure:LoadTestingMetrics} shows all selected metrics.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\linewidth]{images/LoadTestingMetrics.png}
+  \caption{\label{Figure:LoadTestingMetrics}Performance Test Metrics}
+\end{figure}
+
+The "Capacity" metric of the API Gateway is an Azure metric for API Management instances. It combines \ac{CPU} usage, memory usage, and the queue length of incoming requests. This metric was chosen because more specific ones are only available in higher pricing tiers.
+
+More metrics may be selected later, even after the performance test has been executed. This is useful if the initial results warrant further analysis.
+
+\subsection{Performance Test Results and Analysis}
+\label{Subsection:Performance_Test_Results_and_Analysis}
+
+\textbf{[Os testes já foram executados e os gráficos gerados. No entanto, devido a um problema técnico no Azure, esta subsecção ficará para mais tarde (nesta semana). O conteúdo desta secção será a análise dos gráficos de desempenho e as conclusões tiradas a partir dos mesmos.]}
+
+\pagebreak
 
 \section{Requirements Fulfillment}
 \label{Section:Requirements_Fulfillment}
