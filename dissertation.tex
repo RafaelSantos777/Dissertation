@@ -275,6 +275,7 @@ Write your abstract here in English.
   \acro{DTO}{Data Transfer Object}
   \acro{ECS}{Elastic Container Service}
   \acro{GB}{Gigabyte}
+  \acro{GiB}{Gibibyte}
   \acro{GCP}{Google Cloud Platform}
   \acro{HTTP}{Hypertext Transfer Protocol}
   \acro{HTTPS}{Hypertext Transfer Protocol Secure}
@@ -1236,7 +1237,7 @@ The Azure Container Apps Environment hosts all microservices as Azure Container 
   \caption{\label{Figure:ContainerAppsEnvironment}Container Apps Environment Configuration}
 \end{figure}
 
-Each microservice is deployed as a separate Container App. Each Container App runs a specific Docker image version stored in the Container Registry. When the \ac{CI/CD} pipeline deploys a new version of a microservice, it updates the Container App to use the new Docker image, creating a revision of the Container App. Microservices run in Docker containers of that image. Each microservice instance has 0.5 general-purpose \acp{vCPU} and 1 \ac{GB} of memory allocated.
+Each microservice is deployed as a separate Container App. Each Container App runs a specific Docker image version stored in the Container Registry. When the \ac{CI/CD} pipeline deploys a new version of a microservice, it updates the Container App to use the new Docker image, creating a revision of the Container App. Microservices run in Docker containers of that image. Each microservice instance has 0.5 general-purpose \acp{vCPU} and 1 \ac{GiB} of memory allocated.
 
 Another valuable feature is the ability to set scaling rules for each microservice, which may be based on \ac{HTTP} traffic, \ac{CPU} usage, or memory usage. Specifically, every Container App is configured to scale between 1 and 10 instances, based on the average number of concurrent \ac{HTTP} requests being processed per instance. If this number exceeds 50, the Container App will automatically scale up to deal with the increased load. Conversely, if the average workload remains lower for 5 minutes, the Container App will scale down to conserve resources. Figure \ref{Figure:ContainerAppsScaling} shows the scaling configuration.
 
@@ -1265,7 +1266,7 @@ Figure \ref{Figure:DatabaseConfigurationQuery} demonstrates the subsequent step,
   \caption{\label{Figure:DatabaseConfigurationQuery}Database Roles Assignment}
 \end{figure}
 
-Different databases may have differing computation power and storage capacity, depending on the microservice's needs. All databases have 16 \acp{GB} of storage. In terms of computation power, Quotation Service's database has 2 general-purpose \acp{vCPU}, while the other microservices' databases have the default 1 \ac{vCPU}. This disparity is due to the fact this database will be used in performance testing. Figure \ref{Figure:DatabaseConfigurationBase} shows the basic configuration properties of Quotation Service's database, which is similar to all others barring the number of \acp{vCPU}.
+Different databases may have differing computation power and storage capacity, depending on the microservice's needs. All databases have 16 \acp{GB} of storage, to save costs. In terms of computation power, Quotation Service's database has 2 general-purpose \acp{vCPU}, while the other microservices' databases have the default 1 \ac{vCPU}. This disparity is due to the fact this database will be used in performance testing. Figure \ref{Figure:DatabaseConfigurationBase} shows the basic configuration properties of Quotation Service's database, which is similar to all others barring the number of \acp{vCPU}.
 
 \begin{figure}[H]
   \centering
@@ -1442,7 +1443,7 @@ Table \ref{Table:CloudPlatformsServiceMapping} summarizes the mapping of web \ac
     \hline
     Microservice Environment                              & Container Apps Environment          & \ac{ECS}                               & Cloud Run                              \\
     \hline
-    Data Persistence Layer                                & SQL Server                          & \ac{RDS} for SQL Server                & Cloud SQL                              \\
+    Data Persistence Layer                                & SQL Server                          & \ac{RDS} for SQL Server                & Cloud SQL with SQL Server              \\
     \hline
   \end{tabular}
   \vspace{10pt}
@@ -1453,7 +1454,7 @@ Table \ref{Table:CloudPlatformsServiceMapping} summarizes the mapping of web \ac
 \subsection{Cost Analysis Parameters}
 \label{Subsection:Cost_Analysis_Parameters}
 
-The total cost of hosting the web \ac{API} depends on various parameters. Therefore, it is difficult to estimate the cost accurately. Still, the parameters were selected based on the the requirements defined in Section \ref{Section:Requirements} and mid-tier pricing plans on the cloud platforms.
+The total cost of hosting the web \ac{API} depends on various parameters. Therefore, it is difficult to estimate the cost accurately. Still, the parameters were selected based on the the requirements defined in Section \ref{Section:Requirements}, the results of the performance test in Subsection \ref{Subsection:Performance_Test_Results_and_Analysis}, and mid-tier pricing plans on the cloud platforms.
 
 Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered in the cost analysis, along with the rationale behind their values.
 
@@ -1495,7 +1496,7 @@ Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered i
   \hline
   Virtual Network Integration
    & Yes
-   & The \ac{API} Gateway must integrate with the \ac{VNet}, as implemented in the web \ac{API}.                                                                                                                                                                                                                                                                                                                                                                                         \\
+   & The \ac{API} Gateway must integrate with the \ac{VNet}, as implemented in the web \ac{API}. Therefore, \ac{VNet} integration costs are considered.                                                                                                                                                                                                                                                                                                                                  \\
   \hline
   Number of Microservices
    & 4
@@ -1506,8 +1507,8 @@ Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered i
    & This value assumes each microservice has 4 active instances with 0.5 \acp{vCPU}, on average. All chosen cloud platform \acp{vCPU} belong to a general-purpose tier, although their processing power may still vary between cloud providers.                                                                                                                                                                                                                                         \\
   \hline
   Microservice Memory (Average)
-   & 4 GB
-   & This value assumes that, on average, each microservice has 4 instances with 1 \ac{GB} of memory running.                                                                                                                                                                                                                                                                                                                                                                            \\
+   & 4 GiB
+   & This value assumes that, on average, each microservice has 4 instances with 1 \ac{GiB} of memory running.                                                                                                                                                                                                                                                                                                                                                                           \\
   \hline
   Number of Databases
    & 3
@@ -1518,7 +1519,7 @@ Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered i
    & It is difficult to predict the necessary \ac{CPU} resources for the databases. Quotation requests involve more resource-intensive queries than the ones used in the performance test, so more than 2 \acp{vCPU} were selected. The value of this parameter is also associated with mid-tier options in cloud provider offerings. For easier comparison between cloud providers, the database \ac{CPU} allocation is static, as opposed to being dynamically adjusted based on load. \\
   \hline
   Database Memory (Static)
-   & 16 GB
+   & 16 GiB
    & This value is in line with cloud provider options offering 4 \acp{vCPU}.                                                                                                                                                                                                                                                                                                                                                                                                            \\
   \hline
   Database Storage (Static)
@@ -1537,11 +1538,51 @@ Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered i
    & Europe
    & Applies to all requests, to simplify analysis.                                                                                                                                                                                                                                                                                                                                                                                                                                      \\
 \end{longtable}
+\subsection{Cost Analysis Selected Pricing Options}
+The cheapest pricing tiers and options that satisfy all parameters and allow for uninterrupted service execution were selected for each cloud service. Table \ref{Table:Cost_Analysis_Selected_Options} shows the selected pricing options for each cloud service, per cloud platform.
+
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{|M{135pt}|M{90pt}|M{98pt}|M{90pt}|}
+    \hline
+    \multicolumn{1}{|c|}{\textbf{Web \ac{API} Component}} & \multicolumn{1}{c|}{\textbf{Azure}}                   & \multicolumn{1}{c|}{\textbf{\ac{AWS}}}                 & \multicolumn{1}{c|}{\textbf{\ac{GCP}}}        \\
+    \hline
+    \ac{API} Gateway                                      & Standard v2                                           & REST APIs                                              & Default                                       \\
+    \hline
+    Microservice Environment                              & Dedicated Plan                                        & Linux/x86                                              & Instance-Based, Compute Flexible CUD          \\
+    \hline
+    Data Persistence Layer                                & Provisioned, General Purpose, Standard-series (Gen 5) & Reserved Instances, Web Database Edition, db.t3.xlarge & Enterprise Edition, Web Version db-standard-4 \\
+    \hline
+  \end{tabular}
+  \vspace{10pt}
+  \caption{Cloud Platform Selected Pricing Options}
+  \label{Table:Cost_Analysis_Selected_Options}
+\end{table}
 
 \subsection{Cost Analysis Results}
 \label{Subsection:Cost_Analysis_Results}
 
-\pagebreak
+Considering the parameters and pricing options defined in Subsection \ref{Subsection:Cost_Analysis_Parameters}, the estimated monthly cost of hosting the web \ac{API} in each cloud platform was calculated. Table \ref{Table:Cost_Analysis_Results} indicates the results in Euros.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|M{135pt}|M{80pt}|M{80pt}|M{80pt}|}
+    \hline
+    \multicolumn{1}{|c|}{\textbf{Web \ac{API} Component}} & \multicolumn{1}{c|}{\textbf{Azure}} & \multicolumn{1}{c|}{\textbf{\ac{AWS}}} & \multicolumn{1}{c|}{\textbf{\ac{GCP}}} \\
+    \hline
+    \ac{API} Gateway                                      & 721.00 \euro                        & 357.36 \euro                           & 299.25 \euro                           \\
+    Microservice Environment                              & 336.38 \euro                        & 246.36 \euro                           & 321.83 \euro                           \\
+    Data Persistence Layer                                & 423.00 \euro                        & 503.16 \euro                           & 585.93 \euro                           \\
+    \hline
+    \textbf{Total}                                        & \textbf{1,480.38 \euro}             & \textbf{1,106.88 \euro}                & \textbf{1,207.01 \euro}                \\
+    \hline
+  \end{tabular}
+  \vspace{10pt}
+  \caption{Estimated Hosting Cost per Cloud Platform}
+  \label{Table:Cost_Analysis_Results}
+\end{table}
+
+The results indicate that \ac{AWS} is the cheapest cloud platform to host the web \ac{API}, with an estimated monthly cost of 1,106.88 \euro. The most expensive option is Microsoft Azure, with 1,480.38 \euro. This higher cost is mainly due to the \ac{API} Gateway, which requires a more expensive pricing tier to support \ac{VNet} integration. In-between is \ac{GCP}, with an estimated monthly cost of 1,207.01 \euro.
 
 \section{Requirements Fulfillment}
 \label{Section:Requirements_Fulfillment}
