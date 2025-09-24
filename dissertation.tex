@@ -279,6 +279,7 @@ Write your abstract here in English.
   \acro{GCP}{Google Cloud Platform}
   \acro{HTTP}{Hypertext Transfer Protocol}
   \acro{HTTPS}{Hypertext Transfer Protocol Secure}
+  \acro{IaC}{Infrastructure as Code}
   \acro{IATA}{International Air Transport Association}
   \acro{IaaS}{Infrastructure as a Service}
   \acro{IDE}{Integrated Development Environment}
@@ -532,7 +533,7 @@ Containerization is an approach to deploying software where an application, alon
 
 Containers are portable and self-sufficient packages, which ensures they run consistently across different environments. This consistency reduces deployment issues and makes it easier to set up new environments. Additionally, unlike regular \acp{VM}, containers virtualize their \ac{OS}, meaning they only contain the application itself, with no \ac{OS} overhead. Because of this, containers use less memory and \ac{CPU} power, making them more efficient and scalable than \acp{VM}~\cite{Figueira2024, Hardikar2021, Potdar2020}.
 
-Docker is the leading container platform. It automates and standardizes the deployment of applications inside software containers by providing an additional layer of abstraction to the containerization process. To create a container, Docker uses a Dockerfile, which is a text-based script of instructions used to create a container image. This immutable image is a lightweight, standalone, executable package that contains everything needed to run an application. When the image is run, it becomes a container, which is an active instance of the image~\cite{Figueira2024, Hardikar2021, Potdar2020}.
+Docker is the leading container platform. It automates and standardizes the deployment of applications inside software containers by providing an additional layer of abstraction to the containerization process. To create a container, Docker uses a Dockerfile, a text-based script of instructions used to create a container image. This immutable image is a lightweight, standalone, executable package that contains everything needed to run an application. When the image is run, it becomes a container, which is an active instance of the image~\cite{Figueira2024, Hardikar2021, Potdar2020}.
 
 
 \chapter{Research Methodology}
@@ -619,7 +620,7 @@ Furthermore, a literature search on freight forwarding was done to better unders
 \section{Requirements}
 \label{Section:Requirements}
 
-The design and architecture of the web \ac{API} are guided by a specific list of requirements. These include functional requirements, which establish the system's features, and non-functional requirements, which determine the attributes of the system and how it should operate. Every requirement is listed below:
+The design and architecture of the web \ac{API} are guided by a specific list of software requirements. These include functional requirements that establish the system's features, and non-functional requirements that determine the attributes of the system and how it should operate. Every requirement is listed below:
 
 \begin{requirement}
   \label{Requirement:1}
@@ -971,7 +972,7 @@ Every microservice in the Microservice Environment is built with the ASP.NET Cor
 \section{Development Environment}
 \label{Section:Development_Environment}
 
-During development, JetBrains Rider\footnote{JetBrains Rider, \url{https://www.jetbrains.com/rider/}, (accessed 31 Aug. 2025)} \ac{IDE} was used as the main tool for writing, testing, and debugging the microservices' source code. This \ac{IDE} provides a vast set of features, including code completion, refactoring tools, and integrated debugging support, which significantly increase developer productivity.
+During development, JetBrains Rider\footnote{JetBrains Rider, \url{https://www.jetbrains.com/rider/}, (accessed 31 Aug. 2025)} \ac{IDE} was used as the main tool for writing, testing, and debugging the microservices' source code. This \ac{IDE} provides a vast set of features, including code completion, refactoring tools, and integrated debugging support. These features significantly increase developer productivity.
 
 Docker Desktop\footnote{Docker Desktop, \url{https://www.docker.com/products/docker-desktop/}, (accessed 31 Aug. 2025)} was installed to test the Docker containers and register them to the Container Registry.
 
@@ -1090,7 +1091,7 @@ External carrier \acp{API} impose rate limits on the number of requests that can
 
 Each cache entry is based on a unique combination of request parameters that define what freight rates will be returned by the external carrier \ac{API}. For both \acp{API}, a combination of the origin and destination locations are sufficient to uniquely identify a cache entry. When a request for freight rates is received, the service first checks if a valid cache entry exists. If it does, the cached freight rates are returned. If not, a request is made to the external carrier \ac{API}, and the retrieved freight rates are stored in the cache.
 
-The main purpose of the caching mechanism is to reduce the number of requests to the external carrier \acp{API}. Because of this, the databases of WebCargo Service and Cargofive Service store not only the rate history, but also the cached data, for simplicity. However, this implementation has some drawbacks, such as increased cached lookup times and potential database load. In future work, a dedicated caching alternative like Redis Cache \footnote{Redis Cache, \url{https://redis.io/docs/}, (accessed 12 Sep. 2025)} would be useful for its increased performance and built-in cache expiration mechanisms.
+The main purpose of the caching mechanism is to reduce the number of requests to the external carrier \acp{API}. Because of this, the databases of WebCargo Service and Cargofive Service store not only the rate history, but also the cached data, for simplicity. However, this implementation has some drawbacks, such as increased cached lookup times and potential database load. In future work, a dedicated caching alternative would be useful for its increased performance and built-in cache expiration mechanisms.
 
 \subsection{Quote History}
 \label{Subsection:Quote_History}
@@ -1251,7 +1252,7 @@ Another valuable feature is the ability to set scaling rules for each microservi
 
 An Azure SQL Server instance hosts the databases of all microservices. Each microservice has its own SQL database. Public access to the SQL Server is disabled, and it can only be accessed from within the \ac{VNet} through a private endpoint.
 
-Every microservice connects to its database through passwordless authentication, which allows Container Apps to authenticate without storing confidential connection strings. Instead, a generic connection string that only depends on the name of the target database is enough. To achieve this, each Container App is assigned a managed identity, which is then granted the "db\_datareader" and "db\_datawriter" roles in the target database. Figure \ref{Figure:DatabaseConfigurationManagedIdentity} shows the active managed identity of WebCargo Service's Container App, which is similar for all other microservices.
+Every microservice connects to its database through passwordless authentication, allowing Container Apps to authenticate without storing confidential connection strings. Instead, a generic connection string that only depends on the name of the target database is enough. To achieve this, each Container App is assigned a managed identity, which is then granted the "db\_datareader" and "db\_datawriter" roles in the target database. Figure \ref{Figure:DatabaseConfigurationManagedIdentity} shows the active managed identity of WebCargo Service's Container App, which is similar for all other microservices.
 Figure \ref{Figure:DatabaseConfigurationQuery} demonstrates the subsequent step, where a \ac{SQL} query executed in the Azure Portal to assign the necessary database roles.
 
 \begin{figure}[H]
@@ -1400,7 +1401,7 @@ Table \ref{Table:CloudPlatformsServiceMapping} summarizes the mapping of web \ac
 \subsection{Cost Analysis Parameters}
 \label{Subsection:Cost_Analysis_Parameters}
 
-The total cost of hosting the web \ac{API} depends on various parameters. Therefore, it is difficult to estimate the cost accurately. Still, the parameters were selected based on the the requirements defined in Section \ref{Section:Requirements}, the results of the performance test in Subsection \ref{Subsection:Performance_Test_Results_and_Analysis}, and mid-tier pricing plans on the cloud platforms.
+The total cost of hosting the web \ac{API} depends on various parameters, so it is difficult to estimate the cost accurately. Still, the parameters were selected based on the the requirements defined in Section \ref{Section:Requirements}, the results of the performance test in Subsection \ref{Subsection:Performance_Test_Results_and_Analysis}, and mid-tier pricing plans on the cloud platforms.
 
 Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered in the cost analysis, along with the rationale behind their values.
 
@@ -1475,7 +1476,7 @@ Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered i
    & For lower costs and easier comparison between cloud providers.                                                                                                                                                                                                                                                                                                                                                                                                                      \\
   \hline
   Deployment Region
-   & France
+   & Paris, France
    & Cheaper than most other European regions and supports most offerings.                                                                                                                                                                                                                                                                                                                                                                                                               \\
   \hline
   User Traffic Origin
@@ -1509,7 +1510,7 @@ The cheapest pricing tiers and options that satisfy all parameters and allow for
 \subsection{Cost Analysis Results}
 \label{Subsection:Cost_Analysis_Results}
 
-Considering the parameters and pricing options defined in Subsections \ref{Subsection:Cost_Analysis_Parameters} and \ref{Subsection:Cost_Analysis_Pricing_Options}, the estimated monthly cost of hosting the web \ac{API} in each cloud platform was calculated. Table \ref{Table:Cost_Analysis_Results} shows the results, in Euros.
+Considering the parameters and pricing options defined in Subsections \ref{Subsection:Cost_Analysis_Parameters} and \ref{Subsection:Cost_Analysis_Pricing_Options}, the estimated monthly cost of hosting the web \ac{API} in each cloud platform was calculated. This analysis is based on the prices collected on 23 September 2025. Table \ref{Table:Cost_Analysis_Results} shows the results in Euros.
 
 \begin{table}[H]
   \centering
@@ -1687,14 +1688,30 @@ All requirements delineated in Section \ref{Section:Requirements} were fulfilled
 \section{Limitations}
 \label{Section:Limitations}
 
-% The proposed solution has multiple limitations.
+The proposed solution has multiple limitations.
 
-% First, the development lifecycle was supposed to be accompanied by the business partner Devlop, but the company was only partially involved. Although Devlop did offer initial guidance and provided the \ac{API} keys to access the external carrier \acp{API}, the company was unavailable for the majority of the development phase. This absence led to somewhat arbitrary software requirements (defined in Section \ref{Section:Requirements}), that guided the design and implementation of the web \ac{API}.
+First, the development lifecycle was supposed to be accompanied by the business partner Devlop, but in practice, the company played a minor role. Although Devlop did offer initial guidance and provided the \ac{API} keys to access the external carrier \acp{API}, the company was unavailable for the majority of the development phase. This absence led to somewhat arbitrary software requirements (defined in Section \ref{Section:Requirements}), that guided the design and implementation of the web \ac{API}.
+
+Second, no unit or integration tests were implemented during the development process. The testing strategy (described in Section \ref{Section:Testing_Strategy}) relied on manual testing only. The increased complexity of the microservices architecture and the use of multiple cloud services add intricacies to automated testing, making it a relevant topic for discussion.
+
+Third, this dissertation does not consider some important tools that could have been used in the proposed solution. For example, container orchestration tools like Kubernetes\footnote{Kubernetes, \url{https://kubernetes.io/}, (accessed 24 Sep. 2025)}, which automate the deployment, management, and scaling of containerized applications, were not explored. Furthermore, all cloud components were configured manually through the Azure Portal, which is convenient, but less scalable than using \ac{IaC} tools like Terraform\footnote{Terraform, \url{https://www.terraform.io/}, (accessed 24 Sep. 2025)}. The absence of a dedicated caching approach for frequently accessed data, such as Redis Cache\footnote{Redis Cache, \url{https://redis.io/docs/}, (accessed 24 Sep. 2025)}, constitutes a performance limitation.
+
+Finally, the performance evaluation (detailed in Section \ref{Section:Performance_Evaluation}) is simplistic and only tests one endpoint of the web \ac{API}. This provides a limited view of the performance capabilities of the proposed solution.
+
+\pagebreak
 
 \section{Future Work}
 \label{Section:Future_Work}
 
-% Container app jobs, redis cache,
+In future work, the limitations mentioned in Section \ref{Section:Limitations} could be addressed.
+
+First, the software requirements should be more objective so that the web \ac{API} as a whole better reflects real enterprise and end user needs. This could be achieved by a thorough involvement of a business partner in the development lifecycle, or by studying real-world use cases.
+
+Second, employing testing frameworks to implement unit and integration tests would increase the reliability of the proposed solution. Proper testing would prove the correctness of the web \ac{API}'s source code, preventing software bugs from affecting production environments.
+
+Third, exploring the tools and specific technologies mentioned in Section \ref{Section:Limitations} would increase the comprehensiveness of the research conducted in this research. This would involve investigating container orchestration tools, \ac{IaC} tools, and dedicated caching alternatives.
+
+Lastly, a more extensive performance evaluation that tests multiple endpoints and scenarios would help draw more accurate conclusions about the proposed solution's performance capabilities.
 
 \printbibliography[title={References}]
 \end{document}
