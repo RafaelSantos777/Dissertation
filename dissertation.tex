@@ -1265,7 +1265,7 @@ Figure \ref{Figure:DatabaseConfigurationQuery} demonstrates the subsequent step,
   \caption{\label{Figure:DatabaseConfigurationQuery}Database Roles Assignment}
 \end{figure}
 
-Different databases may have differing computation power and storage capacity, depending on the microservice's needs. All databases have 16 \acp{GB} of storage, to save costs. In terms of computation power, Quotation Service's database has 2 general-purpose \acp{vCPU}, while the other microservices' databases have the default 1 \ac{vCPU}. This disparity is due to the fact this database will be used in performance testing. Figure \ref{Figure:DatabaseConfigurationBase} shows the basic configuration properties of Quotation Service's database, which is similar to all others barring the number of \acp{vCPU}.
+Different databases may have differing computation power and storage capacity, depending on the microservice's needs. All databases have 16 \acp{GB} of storage. In terms of computation power, Quotation Service's database has 2 general-purpose \acp{vCPU}, while the other microservices' databases have the default 1 \ac{vCPU}. This disparity is due to the fact this database will be used in performance testing. Figure \ref{Figure:DatabaseConfigurationBase} shows the basic configuration properties of Quotation Service's database, which is similar to all others barring the number of \acp{vCPU}.
 
 \begin{figure}[H]
   \centering
@@ -1462,7 +1462,7 @@ Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered i
 \begin{longtable}{|M{70pt}|M{55pt}|m{300pt}|}
 
   \caption{Cost Analysis Parameters}
-  \label{Table:Cost_Analysis_Parameters}                                                                                                                                                                                                                                                                                                                                                                                                                                    \\
+  \label{Table:Cost_Analysis_Parameters}                                                                                                                                                                                                                                                                                                                                                                                                                                                 \\
 
   \hline
   \multicolumn{1}{|c|}{\textbf{Parameter}}
@@ -1473,56 +1473,69 @@ Table \ref{Table:Cost_Analysis_Parameters} lists all the parameters considered i
   \hline
   \multicolumn{1}{|c|}{\textbf{Parameter}}
    & \multicolumn{1}{c|}{\textbf{Value}}
-   & \multicolumn{1}{c|}{\textbf{Rationale}}                                                                                                                                                                                                                                                                                                                                                                                                                                \\
+   & \multicolumn{1}{c|}{\textbf{Rationale}}                                                                                                                                                                                                                                                                                                                                                                                                                                             \\
   \hline
   \endhead
 
   \hline
-  \multicolumn{3}{r}{\textit{Continued on the next page...}}                                                                                                                                                                                                                                                                                                                                                                                                                \\
+  \multicolumn{3}{r}{\textit{Continued on the next page...}}                                                                                                                                                                                                                                                                                                                                                                                                                             \\
   \endfoot
 
   \hline
   \endlastfoot
   \hline
-  Monthly API Requests
-   & 100 million
-   & Represents 38.6 user requests per second, on average. This value considers the performance test described in Section \ref{Section:Performance_Evaluation}, where the web \ac{API} dealt with 400 requests per second. However, that value is intended to represent a surge in traffic, and does not take into account quotation requests, which are much more complex. Therefore, a much lower value was chosen.                                                       \\
+  API Requests (Monthly)
+   & 100 Million
+   & Represents 38.6 user requests per second, on average. This value considers the performance test described in Section \ref{Section:Performance_Evaluation}, where the web \ac{API} dealt with 400 requests per second. However, that value is intended to represent a surge in traffic, and does not take into account quotation requests, which are much more complex. Therefore, a much lower value was chosen.                                                                    \\
   \hline
-  Monthly Data Egress
+  Data Egress (Monthly)
    & 500 GB
-   & Considering value of the "Monthly API Requests" parameter, this amounts to an average of 5 \ac{KB} per request response. The size of the responses delivered to users varies heavily, ranging from less than 1 \ac{KB}, to more than 100 \ac{KB} for some quote history requests. 5 \ac{KB} represents a typical quote request response size.                                                                                                                          \\
+   & Considering value of the "API Requests (Monthly)" parameter, this amounts to an average of 5 \ac{KB} per request response. The size of the responses delivered to users varies heavily, ranging from less than 1 \ac{KB}, to more than 100 \ac{KB} for some quote history requests. 5 \ac{KB} represents a typical quote request response size.                                                                                                                                     \\
+
+  \hline
+  Virtual Network Integration
+   & Yes
+   & The \ac{API} Gateway must integrate with the \ac{VNet}, as implemented in the web \ac{API}.                                                                                                                                                                                                                                                                                                                                                                                         \\
   \hline
   Number of Microservices
    & 4
-   & As implemented in the web \ac{API}.                                                                                                                                                                                                                                                                                                                                                                                                                                    \\
+   & As implemented in the web \ac{API}.                                                                                                                                                                                                                                                                                                                                                                                                                                                 \\
   \hline
-  Microservice CPU
-   & 1 \ac{vCPU} (each)
-   & This value represents the average \ac{CPU} utilization of all instances (replicas) of a microservice combined. In the implemented web \ac{API}, each instance is allocated 0.5 \acp{vCPU}. Therefore, the value of this parameter assumes that the average \ac{CPU} utilization is equivalent to 2 instances running at full capacity. All chosen \acp{vCPU} belong to a general-purpose tier, although their processing power may still vary between cloud providers. \\
+  Microservice CPU (Average)
+   & 2 vCPUs
+   & This value assumes each microservice has 4 active instances with 0.5 \acp{vCPU}, on average. All chosen cloud platform \acp{vCPU} belong to a general-purpose tier, although their processing power may still vary between cloud providers.                                                                                                                                                                                                                                         \\
   \hline
-  Microservice Memory
-   & 2 GB (each)
-   & Similarly to the "Microservice CPU" parameter, this value refers to the average memory utilization combining all instances (replicas) of a microservice. In the web \ac{API}, each instance has 1 \ac{GB} of memory. Thus, it is assumed that the average memory use is identical to 2 instances running at full capacity.                                                                                                                                             \\
+  Microservice Memory (Average)
+   & 4 GB
+   & This value assumes that, on average, each microservice has 4 instances with 1 \ac{GB} of memory running.                                                                                                                                                                                                                                                                                                                                                                            \\
   \hline
   Number of Databases
    & 3
-   & User Service's database has extremely low resource requirements. Therefore, only Quotation Service, WebCargo Service, and Cargofive Service's databases were considered.                                                                                                                                                                                                                                                                                               \\
+   & User Service's database has extremely low resource requirements. Therefore, only Quotation Service, WebCargo Service, and Cargofive Service's databases were considered.                                                                                                                                                                                                                                                                                                            \\
   \hline
-  Database CPU
-   & 16 \acp{vCPU} (each)
-   & It is difficult to predict the necessary \ac{CPU} resources for the databases due to varying query complexities and usage patterns. Quotation requests involve more resource-intensive queries than the ones used in the performance test, so more than 2 \acp{vCPU} were selected. The value of this parameter is also associated with mid-tier options in cloud provider offerings.                                                                                  \\
+  Database CPU (Static)
+   & 4 vCPUs
+   & It is difficult to predict the necessary \ac{CPU} resources for the databases. Quotation requests involve more resource-intensive queries than the ones used in the performance test, so more than 2 \acp{vCPU} were selected. The value of this parameter is also associated with mid-tier options in cloud provider offerings. For easier comparison between cloud providers, the database \ac{CPU} allocation is static, as opposed to being dynamically adjusted based on load. \\
   \hline
-  Database Storage
-   & 128 GB (each)
-   & The database storage requirements are hard to predict without real usage data. This value coincides with mid-tier options in cloud provider offerings.                                                                                                                                                                                                                                                                                                                 \\
+  Database Memory (Static)
+   & 16 GB
+   & This value is in line with cloud provider options offering 4 \acp{vCPU}.                                                                                                                                                                                                                                                                                                                                                                                                            \\
+  \hline
+  Database Storage (Static)
+   & 128 GB
+   & The database storage requirements are hard to predict without real usage data. This value coincides with mid-tier options in cloud provider offerings.                                                                                                                                                                                                                                                                                                                              \\
+  \hline
+  Payment Commitment Length
+   & 1 Year
+   & For lower costs and easier comparison between cloud providers.                                                                                                                                                                                                                                                                                                                                                                                                                      \\
   \hline
   Deployment Region
-   & Spain
-   & Cheaper than most other European regions.                                                                                                                                                                                                                                                                                                                                                                                                                              \\
+   & France
+   & Cheaper than most other European regions and supports most offerings.                                                                                                                                                                                                                                                                                                                                                                                                               \\
   \hline
   User Traffic Origin
    & Europe
-   & Applies to all requests, to simplify analysis.                                                                                                                                                                                                                                                                                                                                                                                                                         \\
+   & Applies to all requests, to simplify analysis.                                                                                                                                                                                                                                                                                                                                                                                                                                      \\
 \end{longtable}
 
 \subsection{Cost Analysis Results}
@@ -1622,12 +1635,8 @@ All requirements delineated in Section \ref{Section:Requirements} were fulfilled
 \section{Answering the Research Questions}
 \label{Section:Answering_the_Research_Questions}
 
-\textbf{[Questões ou hipóteses? Neste caso seria apenas uma.]}
-
 \section{Academic Contributions}
 \label{Section:Academic_Contributions}
-
-\textbf{[Definir as contribuiçoes académicas. O que traz de novo? Que lacunas preenche?]}
 
 \section{Limitations}
 \label{Section:Limitations}
