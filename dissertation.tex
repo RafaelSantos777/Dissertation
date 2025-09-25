@@ -1,4 +1,4 @@
-\documentclass[12pt, reqno, oneside]{amsbook}
+\documentclass[12pt, reqno]{amsbook}
 %
 \usepackage{eurosym}
 \usepackage{amsmath}
@@ -333,8 +333,6 @@ Devlop\footnote{Devlop, \url{https://devlop.systems/}, (accessed 16 Aug. 2025)},
 
 This dissertation proposes a conceptual framework to address these integration and scalability challenges, which may be present in other projects with similar characteristics in any industry. To do so, it uses a proof-of-concept implementation to detail and evaluate its architecture.
 
-\pagebreak
-
 \section{Motivation}
 \label{Section:Motivation}
 
@@ -358,20 +356,98 @@ The research question leads the following hypothesis, which will be studied in t
   A microservices architecture, orchestrated through an \ac{API} Gateway and deployed to a cloud platform, is the most suitable choice for complex web applications integrating multiple external \acp{API}.
 \end{hypothesis}
 
+\section{Research Methodology}
+\label{Section:Research_Methodology}
+
+This dissertation follows the \ac{DSRM}, a six-step research approach often used to create \ac{IS}-related artifacts such as models, methods, design theories, or, in this context, an instantiation~\cite{Peffers2007}.
+
+This dissertation adheres to the "Design \& Development Centered Initiation" entry point shown in Figure \ref{Figure:DSRM}, as the first and second steps have already been presented in Chapter \ref{Chapter:Introduction}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\linewidth]{images/DSRM_process_model.png}
+  \caption{\label{Figure:DSRM}Design Science Research Methodology~\cite{Peffers2007}}
+\end{figure}
+
+The following list briefly explains what each step entails and where it is located in this paper:
+
+\begin{description}
+  \item [Problem Identification and Motivation] Section \ref{Chapter:Introduction} highlights that despite \acp{API} being crucial for business connectivity, integrating multiple external \acp{API} creates significant challenges for scalability and reliability. A freight forwarding industry project is introduced as a case study. The motivation expressed in Section \ref{Section:Motivation} is to offer a solution to these problems and contribute with a complete case study to the scientific literature.
+  \item [Definition of Solution Objectives] The goals of the solution proposed in this dissertation are introduced in Section \ref{Section:Motivation}. In Section \ref{Section:Requirements}, all requirements are precisely listed and defined, further clarifying the objectives of the solution.
+  \item [Design and Development] Chapter \ref{Chapter:Design_And_Architecture} details the architecture of the entire solution, while Chapter \ref{Chapter:Implementation} reveals important parts of the implementation process.
+  \item [Demonstration] Chapter \ref{Chapter:Implementation} demonstrates a working artifact deployed on a remote cloud.
+  \item [Evaluation] Chapter \ref{Chapter:Evaluation} evaluates the developed instantiation considering its reliability, performance, predicted cost, and efficacy.
+  \item [Communication] This dissertation itself serves as a means of communication, intended for both academic and business audiences. Chapter \ref{Chapter:Conclusion} summarizes the most relevant findings.
+\end{description}
+
 \section{Document Structure}
 \label{Section:Document_Structure}
 
 This document is divided into seven chapters:
 
 \begin{description}
-  \item [Chapter \ref{Chapter:Introduction}: \nameref{Chapter:Introduction}] This chapter introduces the context, motivation, research question, and hypothesis of this dissertation.
+  \item [Chapter \ref{Chapter:Introduction}: \nameref{Chapter:Introduction}] This chapter introduces the context, motivation, research questions, and the research methodology of this dissertation.
+  \item [Chapter \ref{Chapter:Literature_Search_Methodology}: \nameref{Chapter:Literature_Search_Methodology}] This chapter explains the literature\linebreak search methodology, including the strategy for identifying relevant literature and the papers included in the review.
   \item [Chapter \ref{Chapter:Literature_Review}: \nameref{Chapter:Literature_Review}] This chapter presents a literature review that offers a theoretical background on the main topics relevant to this dissertation.
-  \item [Chapter \ref{Chapter:Research_Methodology}: \nameref{Chapter:Research_Methodology}] This chapter explains the research methodology, including the strategy for identifying relevant literature.
   \item [Chapter \ref{Chapter:Design_And_Architecture}: \nameref{Chapter:Design_And_Architecture}] This chapter details the design and architecture of the proposed solution.
   \item [Chapter \ref{Chapter:Implementation}: \nameref{Chapter:Implementation}] This chapter demonstrates and discusses the implementation of the proposed solution.
   \item [Chapter \ref{Chapter:Evaluation}: \nameref{Chapter:Evaluation}] This chapter evaluates the implemented solution on correctness, cost, performance, and efficacy.
   \item [Chapter \ref{Chapter:Conclusion}: \nameref{Chapter:Conclusion}] This chapter concludes the dissertation, highlighting the main findings, limitations, and suggesting future work.
 \end{description}
+
+\chapter{Literature Search Methodology}
+\label{Chapter:Literature_Search_Methodology}
+
+\section{PRISMA-S}
+\label{Section:PRISMA_S}
+
+Because \ac{DSRM} does not define a method to search scientific literature, PRISMA-S was used as the basis for the literature search. \ac{PRISMA} is a complete set of guidelines used to improve the reporting of systematic literature reviews, promoting rigor. PRISMA-S (or PRISMA-Search) is a reporting guideline that extends PRISMA, contributing with a detailed checklist specifically for reporting literature search methods.
+
+\section{Information Sources}
+\label{Section:Information_Sources}
+
+The b-on\footnote{b-on, \url{https://www.b-on.pt/en/}, (accessed 16 Aug. 2025)} platform was used for the PRISMA-S literature search. b-on is a library that aggregates multiple databases\footnote{b-on, "Collections", \url{https://www.b-on.pt/en/collections/}, (accessed 16 Aug. 2025)}, including IEEE, Web of Science, and Elsevier. This agglomeration removes the need to search individual databases separately.
+
+\section{Search Strategies}
+\label{Section:Search_Strategies}
+
+The search was performed using the exact query shown below, where "TI" and "AB" stand for "title" and "abstract", respectively:
+\vspace{0.5cm}
+\begin{verbatim}
+(TI ("web API*" OR "backend*" OR "web application*")
+OR AB ("web API*" OR "backend*" OR "web application*"))
+AND TI (Architecture OR Develop* OR Design)
+AND TI (Cloud* OR Microservice*)
+\end{verbatim}
+\vspace{0.5cm}
+
+The following search filters were applied in sequence:
+
+\begin{enumerate}
+  \item The document must be from 2015 or later.
+  \item The document must be peer-reviewed.
+  \item The document must be written in English or Portuguese.
+\end{enumerate}
+
+\section{Search Results}
+\label{Section:Search_Results}
+
+Once the search query was run and all aforementioned filters were applied, all filtered documents went through a process to determine whether they would be included in the final review. That process is shown in Figure \ref{Figure:Literature_Search_Flow_Diagram}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\linewidth]{images/Literature_Search_Flow_Diagram.png}
+  \caption{\label{Figure:Literature_Search_Flow_Diagram}Literature Search Flow Diagram}
+\end{figure}
+
+The search query identified 756 documents. Upon filtering and deduplication, 65 documents remained. These documents went through a screening process that involved reading their titles and abstracts to determine their relevance. After screening, 13 documents were left. The eligibility of these documents was then evaluated by reading their full text to verify their relevance more rigorously. Only 10 documents were included in the final review, some of which did not present a complete architectural approach for a web \acp{API} or web application. This outcome matches the lack of literature on this topic mentioned in Section \ref{Section:Motivation}.
+
+\section{Further Search}
+\label{Section:Further_Search}
+
+The 10 resulting documents gathered in Section \ref{Section:Search_Results} did not offer a comprehensive and varied view of web applications or web \acp{API}. Therefore, additional literature searches were conducted based on topics present in those 10 documents, namely Monolithic and Microservice Architectures, Cloud Computing, Authentication and Authorization, Containerization, and Web \ac{API} Frameworks.
+
+Furthermore, a literature search on freight forwarding was done to better understand the business domain of the web API that will be developed. To perform this further research, b-on, Google Scholar, and websites from authoritative sources were accessed.
 
 \chapter{Literature Review}
 \label{Chapter:Literature_Review}
@@ -389,7 +465,7 @@ Freight transportation is defined as the flow and storage of goods throughout a 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1\linewidth]{images/FreightForwarding.png}
+  \includegraphics[width=0.9\linewidth]{images/FreightForwarding.png}
   \caption{\label{Figure:FreightForwarding}Freight Forwarding Stakeholders, adapted from~\cite{Peffers2007}}
 \end{figure}
 
@@ -440,7 +516,7 @@ In 2024, Stack Overflow conducted a survey to assess the popularity of several t
 
 \FloatBarrier
 \begin{figure}[H]
-  \includegraphics[width=1\linewidth]{images/Backend_Frameworks_Popularity.png}
+  \includegraphics[width=0.9\linewidth]{images/Backend_Frameworks_Popularity.png}
   \caption{\label{Figure:Backend_Frameworks_Popularity}Web \ac{API} frameworks used by professional developers, adapted from~\cite{StackOverflow}}
 \end{figure}
 \FloatBarrier
@@ -455,9 +531,7 @@ The web \ac{API} frameworks present in Figure \ref{Figure:Backend_Frameworks_Pop
   \item [Laravel] A feature-rich framework built on the PHP programming language. Its toolset includes an \ac{ORM} database tool, versatile database migrations, and built-in task queuing and scheduling. This framework prioritizes concise and well-organized code. Laravel is suitable for both small projects and large-scale applications~\cite{Mozilla, Madurapperuma2022, Nguyen2022}.
 \end{description}
 
-\pagebreak
-
-\section{Monolithic vs. Microservices Architecture}
+\section{Monolithic \textit{vs.} Microservices Architecture}
 \label{Section:Monolithic_vs_Microservices_Architecture}
 
 The architectural design of a web \ac{API} is a decision that significantly impacts its development, deployment, scalability, and maintenance. When developing web \acp{API}, two dominant patterns emerge: the traditional monolithic approach and the modern microservices approach. Several papers highlight their benefits and drawbacks~\cite{Huf2019, Taibi2018, Adrio2023, Moysiadis2022}.
@@ -478,14 +552,12 @@ However, the monolithic model can be resource-inefficient since it is impossible
 \end{figure}
 \FloatBarrier
 
-\pagebreak
-
 \subsection{Microservices Architecture}
 \label{Subsection:Microservices_Architecture}
 
 A microservices architecture follows a \ac{SOA}, structuring an application as a collection of small and loosely coupled services. Each service is self-contained, responsible for a specific business goal, and may communicate with other services~\cite{Taibi2018, Adrio2023, Moysiadis2022, Khalfaoui2025, Figueira2024, Kenan2020}.
 
-It offers superior scalability, as each service can be scaled independently based on its specific load, which is a highly efficient model for cloud-based deployments. This decoupling also allows a heterogeneous technology stack, for example, one service may use the ASP.NET Core framework while another uses the Spring Boot framework. Furthermore, this type of architecture is more resilient, as the failure of a single service does not necessarily compromise the entire application. Additionally, this architecture improves maintainability by breaking a large application down into smaller and more understandable codebases. Developers can work on individual services, allowing them to develop, deploy, and update their components autonomously~\cite{Taibi2018, Adrio2023, Moysiadis2022, Khalfaoui2025, Figueira2024, Kenan2020, Villamizar2015}.
+The microservices architecture offers superior scalability, as each service can be scaled independently based on its specific load, which is a highly efficient model for cloud-based deployments. This decoupling also allows a heterogeneous technology stack, for example, one service may use the ASP.NET Core framework while another uses the Spring Boot framework. Furthermore, this type of architecture is more resilient, as the failure of a single service does not necessarily compromise the entire application. Additionally, this architecture improves maintainability by breaking a large application down into smaller and more understandable codebases. Developers can work on individual services, allowing them to develop, deploy, and update their components autonomously~\cite{Taibi2018, Adrio2023, Moysiadis2022, Khalfaoui2025, Figueira2024, Kenan2020, Villamizar2015}.
 
 However, the microservices pattern introduces some challenges. One drawback is the increased implementation effort, since developers must implement mechanisms for inter-service communication. This leads directly to communication and network complexity. Instead of simple function calls, services must communicate over a network, introducing considerations of latency, security, and fault tolerance~\cite{Taibi2018, Adrio2023, Khalfaoui2025, Figueira2024, Kenan2020, Villamizar2015, Yoo2025}.
 
@@ -514,10 +586,12 @@ Cloud services can be divided into three distinct models:
   \item [\ac{SaaS}] Provides a ready-to-use application fully managed by the cloud provider. This model is designed for end users of the application and organizations that wish to offer it to their employees~\cite{Figueira2024, Nordic2012, Google, Berry2021}.
 \end{description}
 
+Figure \ref{Figure:CloudServiceModels} illustrates the differences between these three service models and the self-hosting approach, where the customer is responsible for all components.
+
 \FloatBarrier
 \begin{figure}[H]
-  \includegraphics[width=0.7\linewidth]{images/Cloud_service_models.png}
-  \caption{\label{Figure:Cloud_service_models}Cloud service models}
+  \includegraphics[width=0.7\linewidth]{images/CloudServiceModels.png}
+  \caption{\label{Figure:CloudServiceModels}Cloud service models}
 \end{figure}
 \FloatBarrier
 
@@ -534,85 +608,6 @@ Containerization is an approach to deploying software where an application, alon
 Containers are portable and self-sufficient packages, which ensures they run consistently across different environments. This consistency reduces deployment issues and makes it easier to set up new environments. Additionally, unlike regular \acp{VM}, containers virtualize their \ac{OS}, meaning they only contain the application itself, with no \ac{OS} overhead. Because of this, containers use less memory and \ac{CPU} power, making them more efficient and scalable than \acp{VM}~\cite{Figueira2024, Hardikar2021, Potdar2020}.
 
 Docker is the leading container platform. It automates and standardizes the deployment of applications inside software containers by providing an additional layer of abstraction to the containerization process. To create a container, Docker uses a Dockerfile, a text-based script of instructions used to create a container image. This immutable image is a lightweight, standalone, executable package that contains everything needed to run an application. When the image is run, it becomes a container, which is an active instance of the image~\cite{Figueira2024, Hardikar2021, Potdar2020}.
-
-
-\chapter{Research Methodology}
-\label{Chapter:Research_Methodology}
-
-\section{\texorpdfstring{\ac{DSRM}}{DSRM}}
-
-This dissertation follows the \ac{DSRM}, a six-step research approach often used to create \ac{IS}-related artifacts such as models, methods, design theories, or, in this context, an instantiation~\cite{Peffers2007}.
-
-This dissertation adheres to the "Design \& Development Centered Initiation" entry point shown in Figure \ref{Figure:DSRM}, as the first and second steps have already been presented in Chapter \ref{Chapter:Introduction}.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=1\linewidth]{images/DSRM_process_model.png}
-  \caption{\label{Figure:DSRM}Design Science Research Methodology~\cite{Peffers2007}}
-\end{figure}
-
-The following list briefly explains what each step entails and where it is located in this paper:
-
-\begin{description}
-  \item [Problem Identification and Motivation] Section \ref{Chapter:Introduction} highlights that despite \acp{API} being crucial for business connectivity, integrating multiple external \acp{API} creates significant challenges for scalability and reliability. A freight forwarding industry project is introduced as a case study. The motivation expressed in Section \ref{Section:Motivation} is to offer a solution to these problems and contribute with a complete case study to the scientific literature.
-  \item [Definition of Solution Objectives] The goals of the solution proposed in this dissertation are introduced in Section \ref{Section:Motivation}. In Section \ref{Section:Requirements}, all requirements are precisely listed and defined, forming the solution objectives.
-  \item [Design and Development] Chapter \ref{Chapter:Design_And_Architecture} details the architecture of the entire solution, while Chapter \ref{Chapter:Implementation} reveals important parts of the implementation process.
-  \item [Demonstration] Chapter \ref{Chapter:Implementation} demonstrates a working artifact deployed on a remote cloud.
-  \item [Evaluation] Chapter \ref{Chapter:Evaluation} evaluates the developed instantiation considering its reliability, performance, relative cost, and efficacy.
-  \item [Communication] This dissertation itself serves as a means of communication, intended for both academic and business audiences. Chapter \ref{Chapter:Conclusion} summarizes the most relevant findings.
-\end{description}
-
-\section{PRISMA-S}
-
-\subsection{PRISMA-S Overview}
-\label{Subsection:PRISMA_S_Overview}
-
-Because \ac{DSRM} does not define a method to search scientific literature, PRISMA-S was used as the basis for the literature search. \ac{PRISMA} is a complete set of guidelines used to improve the reporting of systematic literature reviews, promoting rigor. PRISMA-S (or PRISMA-Search) is a reporting guideline that extends PRISMA, contributing with a detailed checklist specifically for reporting literature search methods.
-
-\subsection{Information Sources}
-\label{Subsection:Information_Sources}
-
-The B-on\footnote{B-on, \url{https://www.b-on.pt/en/}, (accessed 16 Aug. 2025)} platform was used for the PRISMA-S literature search. B-on is a library that aggregates multiple databases\footnote{B-on, "Collections", \url{https://www.b-on.pt/en/collections/}, (accessed 16 Aug. 2025)}, including IEEE, Web of Science, and Elsevier. This agglomeration removes the need to search individual databases separately.
-
-\subsection{Search Strategies}
-\label{Subsection:Search_Strategies}
-
-The search was performed using the exact query shown below, where "TI" and "AB" stand for "title" and "abstract", respectively:
-\vspace{0.5cm}
-\begin{verbatim}
-(TI ("web API*" OR "backend*" OR "web application*")
-OR AB ("web API*" OR "backend*" OR "web application*"))
-AND TI (Architecture OR Develop* OR Design)
-AND TI (Cloud* OR Microservice*)
-\end{verbatim}
-\vspace{0.5cm}
-
-The following search filters were applied iteratively:
-
-\begin{enumerate}
-  \item The document must be from 2015 or later.
-  \item The document must be peer-reviewed.
-  \item The document must be written in English or Portuguese.
-\end{enumerate}
-
-\subsection{Search Results}
-\label{Subsection:Search_Results}
-
-Once the search query was run and all aforementioned filters were applied, all filtered documents went through a process to determine whether they would be included in the final review. That process is shown in Figure \ref{Figure:Literature_Search_Flow_Diagram}.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.9\linewidth]{images/Literature_Search_Flow_Diagram.png}
-  \caption{\label{Figure:Literature_Search_Flow_Diagram}Literature Search Flow Diagram}
-\end{figure}
-
-The search query identified 756 documents. Upon filtering and deduplication, 65 documents remained. These documents went through a screening process that involved reading their titles and abstracts to determine their relevance. After screening, 13 documents were left. The eligibility of these documents was then evaluated by reading their full text to verify their relevance more rigorously. Only 10 documents were included in the final review, some of which did not present a complete architectural approach for a web \acp{API} or web application. This outcome matches the lack of literature on this topic mentioned in \ref{Section:Motivation}.
-
-\section{Further Research}
-\label{Further_Research}
-The 10 resulting documents gathered in Subsection \ref{Subsection:Search_Results} did not offer a comprehensive and varied view of web applications or web \acp{API}. Therefore, additional literature searches were conducted based on topics present in those 10 documents, namely Monolithic and Microservice Architectures, Cloud Computing, Authentication and Authorization, Containerization, and Web \ac{API} Frameworks.
-
-Furthermore, a literature search on freight forwarding was done to better understand the business domain of the web API that will be developed. To perform this further research, B-on, Google Scholar, and websites from authoritative sources were accessed.
 
 \chapter{Design and Architecture}
 \label{Chapter:Design_And_Architecture}
@@ -667,8 +662,6 @@ The design and architecture of the web \ac{API} are guided by a specific list of
   Freight rates from external carrier \acp{API} must be cached for 1 day to avoid reaching rate limits.
 \end{requirement}
 
-\pagebreak
-
 \begin{requirement}
   \label{Requirement:10}
   When serving concurrent 200 users sending basic GET requests, the 90th percentile response time must be less than 500 milliseconds. Basic GET requests are those that simply retrieve a database record based on its unique identifier from the database.
@@ -687,8 +680,6 @@ The design and architecture of the web \ac{API} are guided by a specific list of
 
 Requirements \ref{Requirement:1} to \ref{Requirement:5} are functional, whereas Requirements \ref{Requirement:6} to \ref{Requirement:12} are non-functional. Requirement \ref{Requirement:1} was explicitly specified by the industry partner Devlop, representing the web \ac{API}'s main functionality. To expand its scope, others were added as reasonable requirements for a real-world, enterprise web \ac{API}.
 
-\pagebreak
-
 \section{High-Level Architecture}
 \label{Section:High_Level_Architecture}
 
@@ -699,8 +690,6 @@ The high-level architecture focuses on the main components of the system and con
   \includegraphics[width=1\linewidth]{images/HighLevelArchitecture.png}
   \caption{\label{Figure:High_Level_Architecture}High-Level Architecture}
 \end{figure}
-
-\pagebreak
 
 \subsection{Client}
 
@@ -757,8 +746,6 @@ The Code Repository is the version control system that stores the source code of
 
 The Container Registry is a private repository for storing and managing the versioned container images for each microservice. During the \ac{CI/CD} process, new Docker images are built and pushed to the registry. Subsequently, these images are pulled from the registry to be run as Docker containers, where each container is an instance of a particular microservice within the Microservice Environment.
 
-\pagebreak
-
 \section{Runtime Communication}
 \label{Section:Runtime_Communication}
 
@@ -789,8 +776,6 @@ User Service exposes endpoints that allow the Client to get information about us
   \caption{\label{Figure:IdentityProviderCommunication}Identity Provider Communication}
 \end{figure}
 
-\pagebreak
-
 \subsection{Database Communication}
 
 Each microservice establishes a connection to its correspondent database and performs the necessary queries to retrieve or modify data. Access to the Data Persistence Layer is secured through a private endpoint within the VNet. Figure \ref{Figure:DatabaseCommunication} illustrates the communication between microservices and their databases.
@@ -800,8 +785,6 @@ Each microservice establishes a connection to its correspondent database and per
   \includegraphics[width=0.9\linewidth]{images/DatabaseCommunication.png}
   \caption{\label{Figure:DatabaseCommunication}Database Communication}
 \end{figure}
-
-\pagebreak
 
 \subsection{Direct Inter-Service Communication}
 \label{Subsection:Direct_Inter_Service_Communication}
@@ -831,8 +814,6 @@ Firstly, User Service must be informed about the deletion to propagate it to the
   \caption{\label{Figure:EventDrivenCommunicationUserDeleted}Event-Driven Inter-Service Communication: User Deleted}
 \end{figure}
 
-\pagebreak
-
 The second scenario occurs when Cargofive Service needs to synchronize data with Quotation Service. This synchronization is necessary because the Cargofive \Ac{API} uses its own identifiers for seaports, unlike the WebCargo \ac{API}, which can identify airports through standardized codes. Cargofive Service fetches the list of supported seaports from the Cargofive \ac{API} weekly. Cargofive Service publishes a "SeaportsUpdated" event to the Message Broker containing the relevant data. Quotation Service is subscribed to this event, so it is notified and updates its database if necessary. This process is shown in Figure \ref{Figure:EventDrivenCommunicationCargofive}.
 
 \begin{figure}[H]
@@ -840,8 +821,6 @@ The second scenario occurs when Cargofive Service needs to synchronize data with
   \includegraphics[width=0.9\linewidth]{images/EventDrivenCommunicationCargofive.png}
   \caption{\label{Figure:EventDrivenCommunicationCargofive}Event-Driven Inter-Service Communication: Cargofive Synchronization}
 \end{figure}
-
-\pagebreak
 
 \subsection{External Carrier API Communication}
 \label{Subsection:External_Carrier_API_Communication}
@@ -854,8 +833,6 @@ WebCargo Service and Cargofive Service communicate with the WebCargo and Cargofi
   \caption{\label{Figure:ExternalCarrierAPICommunication}External Carrier \ac{API} Communication}
 \end{figure}
 
-\pagebreak
-
 \section{\texorpdfstring{\ac{API}}{API} Specification}
 \label{Section:API_Specification}
 
@@ -867,8 +844,6 @@ The \ac{API} specification is a document that lays out the endpoints, data schem
   \caption{\label{Figure:API_Specification}\ac{API} Specification}
 \end{figure}
 
-\pagebreak
-
 \section{Internal Architecture of the Microservices}
 \label{Section:Internal_Architecture_Microservices}
 
@@ -879,8 +854,6 @@ In the web \ac{API}, the source code of each microservice adheres to a similar a
   \includegraphics[width=1\linewidth]{images/InternalMicroserviceArchitecture.png}
   \caption{\label{Figure:InternalMicroserviceArchitecture}Internal Architecture of a Microservice}
 \end{figure}
-
-\pagebreak
 
 \subsection{Middleware}
 \label{Subsection:Middleware}
@@ -926,8 +899,6 @@ The web \ac{API}'s microservices are deployed to the cloud platform through a \a
 \end{figure}
 
 In the first stage, the source code is compiled with a production-ready configuration and built into a container image, which is then pushed to the Container Registry. In the second stage, the container image is deployed to the cloud platform's container orchestration service (the Microservice Environment), where it is run in a scalable and supervised environment. Both of these stages involve authenticating with the relevant cloud platform components using secrets stored in the Code Repository.
-
-\pagebreak
 
 \section{Technology Stack}
 \label{Section:Technology_Stack}
@@ -982,8 +953,6 @@ Postman\footnote{Postman, \url{https://www.postman.com/}, (accessed 31 Aug. 2025
 
 The complete source code for the \ac{API}'s microservices and their respective deployment workflows are available in a public GitHub repository\footnote{\url{https://github.com/RafaelSantos777/FreightQuotationWebAPI}}.
 
-\pagebreak
-
 \section{Microservices Implementation}
 \label{Section:Microservices_Implementation}
 
@@ -1011,8 +980,6 @@ Besides the microservice components described in Section \ref{Section:Internal_A
   \item[entrypoint.sh] This script is executed when the microservice container starts. The microservice container has two distinct behaviors based on the parameters passed to this script. If the first parameter is "migrate", the script applies any pending database migrations and then exits. Otherwise, the script runs the microservice normally by executing the code defined in Program.cs.
   \item[Program.cs] This C\# file is responsible for configuring the web server, the middleware pipeline, and starting the web \ac{API}.
 \end{description}
-
-\pagebreak
 
 \subsection{Freight Rates and Quotes Obtainment}
 \label{Subsection:Freight_Rates_And_Quotes_Obtainment}
@@ -1082,8 +1049,6 @@ The functionality described in this subsection can be tested in Postman. Figure 
   \caption{\label{Figure:AirQuoteResponsePostman}Air Quote Response in Postman}
 \end{figure}
 
-\pagebreak
-
 \subsection{Freight Rates Cache}
 \label{Subsection:Freight_Rates_Cache}
 
@@ -1115,8 +1080,6 @@ Figure \ref{Figure:QuoteHistoryRequestPostman} shows an example request to the q
   \caption{\label{Figure:QuoteHistoryResponsePostman}Quote History Response in Postman}
 \end{figure}
 
-\pagebreak
-
 \subsection{Location Search}
 \label{Subsection:Location_Search}
 
@@ -1137,8 +1100,6 @@ Figure \ref{Figure:LocationSearchRequestPostman} shows an example request to the
   \includegraphics[width=0.8\linewidth]{images/LocationSearchResponsePostman.png}
   \caption{\label{Figure:LocationSearchResponsePostman}Location Search Response in Postman}
 \end{figure}
-
-\pagebreak
 
 \subsection{\texorpdfstring{\ac{RBAC}}{RBAC}}
 \label{Subsection:RBAC}
@@ -1312,8 +1273,6 @@ The latest version of Ubuntu is set as the \ac{OS} of the workflow runner. The f
   \includegraphics[width=0.7\linewidth]{images/GithubWorkflowPreparation.png}
   \caption{\label{Figure:GithubWorkflowPreparation}Workflow Preparation Steps}
 \end{figure}
-
-\pagebreak
 
 The objectives of the subsequent two steps are to build and push the new Docker image of the microservice to the Container Registry. The first step logs into the Container Registry using the "docker/login-action" action. This step uses Azure credentials stored in the repository's secrets to authenticate. The second step builds the Docker image according to the Dockerfile present in the directory of the microservice. Then, the workflow runner tags the Docker image with the current commit hash and pushes it to the Container Registry. Figure \ref{Figure:GithubWorkflowContainerRegistry} shows these steps.
 
@@ -1532,8 +1491,7 @@ Taking into account the parameters and pricing options defined in Subsections \r
 
 The results indicate that \ac{AWS} is the cheapest cloud platform to host the web \ac{API}, with an estimated monthly cost of 1,106.88 \euro. The most expensive option is Microsoft Azure, with 1,480.38 \euro per month. \ac{GCP} is positioned between the two with an estimated monthly cost of 1,207.01 \euro. The higher cost associated with Azure is mainly due to its \ac{API} Gateway requiring a more expensive pricing tier to support \ac{VNet} integration.
 
-\pagebreak
-
+It is important to note that these results are based on various assumptions and simplifications. Real-world costs may vary substantially based on the specific needs and usage patterns of the web \ac{API}.
 \section{Performance Evaluation}
 \label{Section:Performance_Evaluation}
 
@@ -1587,8 +1545,6 @@ More metrics may be selected later, even after the performance test has been exe
 \label{Subsection:Performance_Test_Results_and_Analysis}
 
 \textbf{[Os testes já foram executados e os gráficos gerados. No entanto, devido a um problema técnico no Azure, esta subsecção ficará para mais tarde (nesta semana). O conteúdo desta secção será a análise dos gráficos de desempenho e as conclusões tiradas a partir dos mesmos.]}
-
-\pagebreak
 
 \section{Requirements Fulfillment}
 \label{Section:Requirements_Fulfillment}
@@ -1676,11 +1632,8 @@ All requirements delineated in Section \ref{Section:Requirements} were fulfilled
 \chapter{Conclusion}
 \label{Chapter:Conclusion}
 
-\section{Dissertation Summary}
-\label{Section:Dissertation_Summary}
-
-\section{Answering the Research Questions}
-\label{Section:Answering_the_Research_Questions}
+\section{Concluding Remarks}
+\label{Section:Concluding_Remarks}
 
 \section{Academic Contributions}
 \label{Section:Academic_Contributions}
@@ -1697,8 +1650,6 @@ Second, no unit or integration tests were implemented during the development pro
 Third, this dissertation does not consider some important tools that could have been used in the proposed solution. For example, container orchestration tools like Kubernetes\footnote{Kubernetes, \url{https://kubernetes.io/}, (accessed 24 Sep. 2025)}, which automate the deployment, management, and scaling of containerized applications, were not explored. Furthermore, all cloud components were manually configured through the Azure Portal, which is convenient but less scalable than using \ac{IaC} tools like Terraform\footnote{Terraform, \url{https://www.terraform.io/}, (accessed 24 Sep. 2025)}. The absence of a dedicated caching approach for frequently accessed data, such as Redis Cache\footnote{Redis Cache, \url{https://redis.io/docs/}, (accessed 24 Sep. 2025)}, constitutes a performance limitation.
 
 Finally, the performance evaluation (detailed in Section \ref{Section:Performance_Evaluation}) is simplistic and tests only one endpoint of the web \ac{API}. This provides a limited view of the performance capabilities of the proposed solution.
-
-\pagebreak
 
 \section{Future Work}
 \label{Section:Future_Work}
