@@ -1344,7 +1344,7 @@ The last step deploys the Docker image that was pushed to the Container Registry
 \chapter{Evaluation}
 \label{Chapter:Evaluation}
 
-This chapter analyses the quality of the web \ac{API} implemented in Chapter \ref{Chapter:Implementation} in terms of reliability, cost efficiency, and performance. Afterwards, the extent to which the web \ac{API} satisfies the requirements enumerated in Chapter \ref{Section:Requirements} is evaluated.
+This chapter analyses the quality of the web \ac{API} implemented in Chapter \ref{Chapter:Implementation} in terms of reliability and performance. It also offers the necessary information to estimate the cost of the proposed solution in a real-world scenario. Afterwards, the extent to which the web \ac{API} satisfies the requirements enumerated in Chapter \ref{Section:Requirements} is evaluated.
 
 \section{Testing Strategy}
 \label{Section:Testing_Strategy}
@@ -1363,9 +1363,9 @@ Hosting software components on a cloud platform incurs costs. During the develop
 
 Cloud platforms offer multiple pricing tiers for their cloud services. Pricing tiers focused on development and testing were selected to minimize costs while still providing the necessary features. However, these pricing tiers are not suitable for enterprise production environments, as they have lower limits in terms of performance, scalability, and availability.
 
-The goal of the cost analysis is to estimate the monthly cost of running the web \ac{API} in a real-world production environment. Each cloud platform has distinct pricing models for its services. This Section estimates and compares the cost of hosting the web \ac{API} in three major cloud platforms: Microsoft Azure, \ac{AWS}\footnote{Amazon Web Services, \url{https://aws.amazon.com/}, (accessed 21 Sep. 2025)}, and \ac{GCP}\footnote{Google Cloud Platform, \url{https://cloud.google.com/}, (accessed 21 Sep. 2025)}.
+Determining concrete monetary values for the cost of hosting the web \ac{API} is beyond the scope of this dissertation. The goal of the cost analysis is to provide the necessary parameters to estimate the cost of hosting and running the web \ac{API} in a real-world production environment.
 
-To simplify, the cost analysis focuses on the most expensive components of the web \ac{API}. The most expensive components are the \ac{API} Gateway, the Microservice Environment, and the Data Persistence Layer. Together, they contribute to over 90\% of the total cost. This conclusion was reached by examining two main sources: the official pricing documentation for each cloud provider, and the expenditure data from the development phase of the web \ac{API}.
+Each cloud platform has distinct pricing models for its services. This Section estimates and compares the cost of hosting the web \ac{API} in three major cloud platforms: Microsoft Azure, \ac{AWS}\footnote{Amazon Web Services, \url{https://aws.amazon.com/}, (accessed 21 Sep. 2025)}, and \ac{GCP}\footnote{Google Cloud Platform, \url{https://cloud.google.com/}, (accessed 21 Sep. 2025)}. To simplify, the cost analysis focuses on the most expensive components of the web \ac{API}. The most expensive components are the \ac{API} Gateway, the Microservice Environment, and the Data Persistence Layer. Together, they contribute to over 90\% of the total cost. This conclusion was reached by examining two main sources: the official pricing documentation for each cloud provider, and the expenditure data from the development phase of the web \ac{API}.
 
 Table \ref{Table:CloudPlatformsServiceMapping} summarizes the mapping of web \ac{API} components to their respective cloud platform services considered for the cost analysis.
 
@@ -1473,57 +1473,6 @@ Table \ref{Table:Cost_Analysis_Parameters} lists all parameters considered in th
    & Applies to all requests, to simplify analysis.                                                                                                                                                                                                                                                                                                                                                                                                                                      \\
 \end{longtable}
 
-\subsection{Cost Analysis Pricing Options}
-\label{Subsection:Cost_Analysis_Pricing_Options}
-
-The cheapest pricing tiers and options that satisfy all parameters and allow uninterrupted service execution were selected for each cloud service. Table \ref{Table:Cost_Analysis_Selected_Options} shows the selected pricing options for each cloud service, per cloud platform.
-
-\begin{table}[h!]
-  \centering
-  \begin{tabular}{|M{135pt}|M{90pt}|M{98pt}|M{90pt}|}
-    \hline
-    \multicolumn{1}{|c|}{\textbf{Web \ac{API} Component}} & \multicolumn{1}{c|}{\textbf{Azure}}                   & \multicolumn{1}{c|}{\textbf{\ac{AWS}}}                 & \multicolumn{1}{c|}{\textbf{\ac{GCP}}}         \\
-    \hline
-    \ac{API} Gateway                                      & Standard v2                                           & REST APIs                                              & Default                                        \\
-    \hline
-    Microservice Environment                              & Dedicated Plan                                        & Fargate Pricing, Linux/x86                             & Instance-Based, Compute Flexible CUD           \\
-    \hline
-    Data Persistence Layer                                & Provisioned, General Purpose, Standard-series (Gen 5) & Reserved Instances, Web Database Edition, db.t3.xlarge & Enterprise Edition, Web Version, db-standard-4 \\
-    \hline
-  \end{tabular}
-  \vspace{10pt}
-  \caption{Cloud Platform Selected Pricing Options}
-  \label{Table:Cost_Analysis_Selected_Options}
-\end{table}
-
-\subsection{Cost Analysis Results}
-\label{Subsection:Cost_Analysis_Results}
-
-Taking into account the parameters and pricing options defined in Subsections \ref{Subsection:Cost_Analysis_Parameters} and \ref{Subsection:Cost_Analysis_Pricing_Options}, the estimated monthly cost of hosting the web \ac{API} in each cloud platform was calculated. This analysis is based on the prices collected on 23 September 2025. Table \ref{Table:Cost_Analysis_Results} shows the results in Euros.
-
-\begin{table}[H]
-  \centering
-  \begin{tabular}{|M{135pt}|M{80pt}|M{80pt}|M{80pt}|}
-    \hline
-    \multicolumn{1}{|c|}{\textbf{Web \ac{API} Component}} & \multicolumn{1}{c|}{\textbf{Azure}} & \multicolumn{1}{c|}{\textbf{\ac{AWS}}} & \multicolumn{1}{c|}{\textbf{\ac{GCP}}} \\
-    \hline
-    \ac{API} Gateway                                      & 721.00 \euro                        & 357.36 \euro                           & 299.25 \euro                           \\
-    Microservice Environment                              & 336.38 \euro                        & 289.84 \euro                           & 321.83 \euro                           \\
-    Data Persistence Layer                                & 423.00 \euro                        & 503.16 \euro                           & 585.93 \euro                           \\
-    \hline
-    \textbf{Total}                                        & \textbf{1,480.38 \euro}             & \textbf{1,150.36 \euro}                & \textbf{1,207.01 \euro}                \\
-    \hline
-  \end{tabular}
-  \vspace{10pt}
-  \caption{Estimated Hosting Cost per Cloud Platform}
-  \label{Table:Cost_Analysis_Results}
-\end{table}
-
-The results indicate that \ac{AWS} is the cheapest cloud platform to host the web \ac{API}, with an estimated monthly cost of 1,150.36 \euro. The most expensive option is Microsoft Azure, with 1,480.38 \euro \space per month. \ac{GCP} is positioned between the two with an estimated monthly cost of 1,207.01 \euro.
-
-The higher cost associated with Azure is mainly due to its \ac{API} Gateway requiring a more expensive pricing tier to support \ac{VNet} integration. Without \ac{VNet} integration, Azure's estimated monthly cost would drop to 1,117.89 \euro, making it the cheapest option.
-
-It is important to note that these results are based on various assumptions and simplifications. Real-world costs may vary substantially based on the specific needs and usage patterns of the web \ac{API}.
 \section{Performance Evaluation}
 \label{Section:Performance_Evaluation}
 
