@@ -1533,6 +1533,7 @@ To satisfy Requirement \ref{Requirement:10}, the 90th percentile of response tim
 \vspace{10pt}
 
 \subsection{Performance Test Setup and Configuration}
+\label{Subsection:Performance_Test_Setup_and_Configuration}
 
 The Azure Portal provides a service called "Azure Load Testing" that allows the creation and execution of performance test scenarios. This service was used to set up and run the performance test scenario described in Subsection \ref{Subsection:Performance_Test_Scenario}.
 
@@ -1567,7 +1568,61 @@ More metrics may be selected later, even after the performance test has been exe
 \subsection{Performance Test Results and Analysis}
 \label{Subsection:Performance_Test_Results_and_Analysis}
 
-\textbf{[Os testes já foram executados e os gráficos gerados. No entanto, devido a um problema técnico no Azure, esta subsecção ficará para mais tarde (nesta semana). O conteúdo desta secção será a análise dos gráficos de desempenho e as conclusões tiradas a partir dos mesmos.]}
+The final test was executed on the 20th of September 2025, from 20:30:50 to 20:35:50 (UTC+1), making up the 5 minutes mentioned in Subsection \ref{Subsection:Performance_Test_Scenario}.
+
+Figure \ref{Figure:LoadTestingVirtualUsers} shows the number of concurrent virtual users throughout the test. The number of users increases linearly for 2 minutes (the warm-up period). Then, this number remains constant for the remaining 3 minutes of the test. This evolution matches the configuration defined in Subsection \ref{Subsection:Performance_Test_Setup_and_Configuration}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.98\linewidth]{images/LoadTestingVirtualUsers.png}
+  \caption{\label{Figure:LoadTestingVirtualUsers}Concurrent Virtual Users During Performance Test}
+\end{figure}
+
+The next graphs shown in this subsection exclude the warm-up period, focusing on the actual test with a duration of 3 minutes.
+
+Figure \ref{Figure:LoadTestingTotalResponseTime} shows the results for the most important metric: the total response time. It includes the average response time, the 90th percentile, and the 99th percentile. The 90th percentile for the total response time is 440.89 milliseconds. Therefore, Requirement \ref{Requirement:10} is satisfied, as the 90th percentile is below the threshold of 500 milliseconds.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\linewidth]{images/LoadTestingTotalResponseTime.png}
+  \caption{\label{Figure:LoadTestingTotalResponseTime}Total Response Time During Performance Test}
+\end{figure}
+
+Even though Requirement \ref{Requirement:10} is satisfied, it is still valuable to understand the causes behind the observed response times. That is, identifying which components are preventing this metric from being lower by analysing the other collected metrics.
+
+Figure \ref{Figure:LoadTestingMicroserviceResponseTime} shows the average response time of the Quotation Service's Container App. This value stands for the total time that the microservice takes to process a request, including database communication. The average response time is only 6.80 milliseconds, suggesting that the microservice and the database components are not responsible for bottlenecks.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\linewidth]{images/LoadTestingMicroserviceResponseTime.png}
+  \caption{\label{Figure:LoadTestingMicroserviceResponseTime}Quotation Service Response Time During Performance Test}
+\end{figure}
+
+Considering the metric presented in Figure \ref{Figure:LoadTestingMicroserviceResponseTime}, the \ac{API} Gateway becomes the prime candidate for causing bottlenecks. Figure \ref{Figure:LoadTestingAPIGatewayDuration} shows the average duration that the \ac{API} Gateway took to process a request. This duration encompasses the time taken since the \ac{API} Gateway began processing a request until it received a response from Quotation Service and forwarded it to the client. The duration stayed below 60 milliseconds throughout the test, which is still much lower than the total response time.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\linewidth]{images/LoadTestingAPIGatewayDuration.png}
+  \caption{\label{Figure:LoadTestingAPIGatewayDuration}API Gateway Duration During Performance Test}
+\end{figure}
+
+However, the \ac{API} Gateway's "Capacity" metric, shown in Figure \ref{Figure:LoadTestingAPIGatewayCapacity}, exposes a serious issue. The "Capacity" metric persisted at 100\% for the entire duration of the actual test. This suggests that a big portion of incoming requests were queued before being processed, causing high total response times experienced by the virtual users.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\linewidth]{images/LoadTestingAPIGatewayCapacity.png}
+  \caption{\label{Figure:LoadTestingAPIGatewayCapacity}API Gateway Capacity During Performance Test}
+\end{figure}
+
+The next logical step would be to increase the processing capacity of the \ac{API} Gateway. To do so, a higher pricing tier must be selected and another performance test must be executed. Due to budget limitations, this was not feasible.
+
+Finally, Figure \ref{Figure:LoadTestingActiveReplicas} lists the active Quotation Service replicas at one point during the test. This proves that the microservice environment was able to scale up in a decoupled manner, thus fulfilling \ref{Requirement:8}. Ultimately, most of these replicas were likely unnecessary, as the microservice was far from being the bottleneck.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\linewidth]{images/LoadTestingActiveReplicas.png}
+  \caption{\label{Figure:LoadTestingActiveReplicas}Active Quotation Service Replicas During Performance Test}
+\end{figure}
 
 \section{Requirements Fulfillment}
 \label{Section:Requirements_Fulfillment}
