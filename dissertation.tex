@@ -69,8 +69,8 @@
 \usepackage{amsthm}
 
 \theoremstyle{definition}
-\newtheorem{hypothesis}{Hypothesis}
-\newtheorem{research_question}{Research Question}
+\newtheorem*{hypothesis}{Hypothesis}
+\newtheorem*{research_question}{Research Question}
 \newtheorem{requirement}{Requirement}
 %
 \makeatletter
@@ -331,7 +331,7 @@ The freight forwarding industry serves as a case study for this integration chal
 
 Devlop\footnote{Devlop, \url{https://devlop.systems/}, (accessed 16 Aug. 2025)}, an \acp{IS} company from Portugal that specializes in developing solutions for the transport and logistics sectors, proposed creating a web application to provide real-time freight quotes from multiple carriers to customers. To this effect, two external \acp{API} would be integrated: WebCargo\footnote{WebCargo, \url{https://www.webcargo.co/about/}, (accessed 19 Aug. 2025)} (for air transport) and Cargofive\footnote{Cargofive, \url{https://cargofive.com/}, (accessed 19 Aug. 2025)} (for sea transport). A traditional monolithic software architecture is not suitable for this as the application grows, since an issue in one integration could hinder the entire system. This establishes the need for a more robust and scalable approach.
 
-This dissertation proposes a conceptual framework to address these integration and scalability challenges, which may be present in other projects with similar characteristics in any industry. To do so, it uses a proof-of-concept implementation to detail and evaluate its architecture.
+This dissertation proposes a conceptual framework to address these integration and scalability challenges, which may be present in other projects with similar characteristics in any industry. To do so, it uses a proof-of-concept implementation that applies a microservice-based architecture and is hosted on a remote cloud platform.
 
 \section{Motivation}
 \label{Section:Motivation}
@@ -340,12 +340,11 @@ The dissertation aims to address the architectural challenges faced when integra
 
 Even though the theoretical benefits of microservices and cloud computing are well-documented in scientific literature, there is a lack of practical case studies. The few studies that go beyond theory tend to focus on specific and isolated architectural features rather than presenting a complete framework for building an entire application. This work moves the discussion from theoretical advantages to a complete implementation, providing a concrete case study to the field of software architecture.
 
-The author of this dissertation is motivated by the possibility to learn about modern enterprise-level software architecture and contribute to both the academic and enterprise communities.
-
 \section{Research Questions}
 \label{Section:Research_Questions}
 
 Based on the considerations presented in Section~\ref{Section:Motivation}, this research presents a conceptual framework for developing cloud-native web \acp{API} that integrate and aggregate external services. This study is guided by this research question:
+
 \begin{research_question}
   How to design and implement a software architecture that meets the requirements of complex web applications integrating several external \acp{API}?
 \end{research_question}
@@ -383,17 +382,22 @@ The following list briefly explains what each step entails and where it is locat
 \section{Document Structure}
 \label{Section:Document_Structure}
 
-This document is divided into seven chapters:
+This document is divided into seven chapters.
 
-\begin{description}
-  \item [Chapter \ref{Chapter:Introduction}: \nameref{Chapter:Introduction}] This chapter introduces the context, motivation, research questions, and the research methodology of this dissertation.
-  \item [Chapter \ref{Chapter:Literature_Search_Methodology}: \nameref{Chapter:Literature_Search_Methodology}] This chapter explains the literature\linebreak search methodology, including the strategy for identifying relevant literature and the papers included in the review.
-  \item [Chapter \ref{Chapter:Literature_Review}: \nameref{Chapter:Literature_Review}] This chapter presents a literature review that offers a theoretical background on the main topics relevant to this dissertation.
-  \item [Chapter \ref{Chapter:Design_And_Architecture}: \nameref{Chapter:Design_And_Architecture}] This chapter details the design and architecture of the proposed solution.
-  \item [Chapter \ref{Chapter:Implementation}: \nameref{Chapter:Implementation}] This chapter demonstrates and discusses the implementation of the proposed solution.
-  \item [Chapter \ref{Chapter:Evaluation}: \nameref{Chapter:Evaluation}] This chapter evaluates the implemented solution on correctness, cost, performance, and efficacy.
-  \item [Chapter \ref{Chapter:Conclusion}: \nameref{Chapter:Conclusion}] This chapter concludes the dissertation, highlighting the main findings, limitations, and suggesting future work.
-\end{description}
+Chapter \ref{Chapter:Introduction} introduces the context, motivation, research questions, and the research methodology of this dissertation.
+
+Chapter \ref{Chapter:Literature_Search_Methodology} explains the literature search methodology, including the strategy for identifying relevant literature and the papers included in the review.
+
+Chapter \ref{Chapter:Literature_Review} presents a literature review that offers a theoretical background on the main topics relevant to this dissertation.
+
+Chapter \ref{Chapter:Design_And_Architecture} details the design and architecture of the proposed solution.
+
+Chapter \ref{Chapter:Implementation} demonstrates and discusses the implementation of the proposed solution.
+
+Chapter \ref{Chapter:Evaluation} evaluates the implemented solution on correctness, cost, performance, and efficacy.
+
+Chapter \ref{Chapter:Conclusion} concludes the dissertation, highlighting the main findings, limitations, and suggesting future work.
+
 
 \chapter{Literature Search Methodology}
 \label{Chapter:Literature_Search_Methodology}
@@ -608,6 +612,21 @@ Containerization is an approach to deploying software where an application, alon
 Containers are portable and self-sufficient packages, which ensures they run consistently across different environments. This consistency reduces deployment issues and makes it easier to set up new environments. Additionally, unlike regular \acp{VM}, containers virtualize their \ac{OS}, meaning they only contain the application itself, with no \ac{OS} overhead. Because of this, containers use less memory and \ac{CPU} power, making them more efficient and scalable than \acp{VM}~\cite{Figueira2024, Hardikar2021, Potdar2020}.
 
 Docker is the leading container platform. It automates and standardizes the deployment of applications inside software containers by providing an additional layer of abstraction to the containerization process. To create a container, Docker uses a Dockerfile, a text-based script of instructions used to create a container image. This immutable image is a lightweight, standalone, executable package that contains everything needed to run an application. When the image is run, it becomes a container, which is an active instance of the image~\cite{Figueira2024, Hardikar2021, Potdar2020}.
+
+\section{Literature Review Conclusion}
+\label{Section:Literature_Review_Conclusion}
+
+The literature review presented in this chapter highlighted the main concepts and technologies relevant to this dissertation.
+
+First, an overview of freight transportation, the business domain of the web \ac{API} to be developed, was provided. This overview was useful to understand the commercial purpose of the web \ac{API} and its functional requirements.
+
+Then, this literature review covered the concept of web \acp{API}, their specifications, security methods, and popular development frameworks. In the context of this dissertation, web \acp{API} represent the server-side of web applications. Web \acp{API} expose an interface that allows clients to interact with the server's resources. The most popular specifications for web \acp{API} are \ac{REST}, GraphQL, and \ac{RPC}. Regarding security, authentication and authorization mechanisms like \ac{OAuth} 2.0, \ac{OIDC}, and \ac{JWT} are essential to protect sensitive operations and data. The source code a web \ac{API} can be simplified and standardized by using a framework intended for this type of software.
+
+After that, two architectural patterns for web \acp{API} were discussed, explaining the advantages and disadvantages of a microservices architecture compared to a monolithic one. The microservice-based architecture has many benefits, especially in large-scale applications, but it also introduces complexity.
+
+Finally, cloud computing and containerization were presented. Cloud computing allows companies to access high-quality infrastructure and services on demand, simplifying the deployment and management of web applications. Containerization is a virtualization technology that improves the portability, consistency, and efficiency of deployed applications.
+
+One key characteristic of this literature review is the lack of studies that contribute with a comprehensive architectural approach for web \acp{API} or web applications. The few documents that do exist tend to focus on specific aspects of web \ac{API} architecture, such as security or scalability, rather than providing a holistic view. Chapters \ref{Chapter:Design_And_Architecture} and \ref{Chapter:Implementation} intend to address this issue by detailing the design, architecture, and implementation of a web \ac{API} that follows modern practices described in this literature review.
 
 \chapter{Design and Architecture}
 \label{Chapter:Design_And_Architecture}
@@ -963,7 +982,7 @@ Figure \ref{Figure:ProjectStructure} shows the project structure of the solution
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.55\linewidth]{images/ProjectStructure.png}
+  \includegraphics[width=0.5\linewidth]{images/ProjectStructure.png}
   \caption{\label{Figure:ProjectStructure}Project Structure}
 \end{figure}
 
@@ -1002,17 +1021,17 @@ Through configuration files, Quotation Service knows the addresses of WebCargo S
 
 In this subsection, the process of obtaining an air freight quote is described. The process for sea freight quotes is analogous, with the only significant difference being that Cargofive Service is used instead of WebCargo Service.
 
-When Quotation Service receives an air quote request from an end user, it is transformed into a \ac{DTO} corresponding to a C\# object shown in Figure \ref{Figure:AirQuoteRequestDTO}. If the \ac{DTO} is valid, Quotation Service sends a direct request to a WebCargo Service. This request comprises all the essential query parameters to search for air freight rates from the WebCargo \ac{API}: the \ac{IATA} codes of the origin and the destination airports. Quotation Service stores locations in its database, so it can retrieve the \ac{IATA} codes based on the location identifiers received in the air quote request. Quotation Service and WebCargo Service have an equivalent definition of the request \ac{DTO}, shown in Figure \ref{Figure:AirRateRequestDTO}.
+When Quotation Service receives an air quote request from an end user, it is transformed into a \ac{DTO} corresponding to a C\# object shown in Figure \ref{Figure:AirQuoteRequestDTO}. If the \ac{DTO} is valid, Quotation Service sends a direct request to a WebCargo Service. This request comprises all the essential query parameters to search for air freight rates from the WebCargo \ac{API}: the \ac{IATA} codes of the origin and the destination airports. Quotation Service stores locations in its database, so it can retrieve the \ac{IATA} codes based on the location identifiers received in the air quote request. Quotation Service and WebCargo Service have an equivalent definition of the request \ac{DTO}, shown in Figure \ref{Figure:AirRateRequestDTO}. Figures \ref{Figure:AirQuoteRequestDTO}, \ref{Figure:AirRateRequestDTO}, and upcoming figures in this chapter contain blurred elements to hide irrelevant details.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\linewidth]{images/AirQuoteRequestDTO.png}
+  \includegraphics[width=0.7\linewidth]{images/AirQuoteRequestDTO.png}
   \caption{\label{Figure:AirQuoteRequestDTO}Air Quote Request DTO}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\linewidth]{images/AirRateRequestDTO.png}
+  \includegraphics[width=0.7\linewidth]{images/AirRateRequestDTO.png}
   \caption{\label{Figure:AirRateRequestDTO}Air Rate Request DTO}
 \end{figure}
 
@@ -1022,7 +1041,7 @@ If no valid cache entry exists, a request is made to the WebCargo \ac{API}. Once
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\linewidth]{images/AirRateDTO.png}
+  \includegraphics[width=0.75\linewidth]{images/AirRateDTO.png}
   \caption{\label{Figure:AirRateDTO}Air Rate DTO}
 \end{figure}
 
@@ -1112,7 +1131,7 @@ Figure \ref{Figure:UserSearchRequestPostman} shows a search request in Postman f
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\linewidth]{images/UserSearchRequestPostman.png}
+  \includegraphics[width=0.7\linewidth]{images/UserSearchRequestPostman.png}
   \caption{\label{Figure:UserSearchRequestPostman}User Search Request in Postman}
 \end{figure}
 
@@ -1252,7 +1271,7 @@ The Code Repository, which is hosted on GitHub, includes a directory named ".git
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.6\linewidth]{images/GithubScriptsAndWorkflows.png}
+  \includegraphics[width=0.5\linewidth]{images/GithubScriptsAndWorkflows.png}
   \caption{\label{Figure:GithubScriptsAndWorkflows}Github Scripts and Workflows}
 \end{figure}
 
@@ -1270,7 +1289,7 @@ The latest version of Ubuntu is set as the \ac{OS} of the workflow runner. The f
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\linewidth]{images/GithubWorkflowPreparation.png}
+  \includegraphics[width=0.6\linewidth]{images/GithubWorkflowPreparation.png}
   \caption{\label{Figure:GithubWorkflowPreparation}Workflow Preparation Steps}
 \end{figure}
 
@@ -1286,7 +1305,7 @@ The next step logs into the Azure account of the web \ac{API}'s resources, which
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\linewidth]{images/GithubWorkflowAzureLogin.png}
+  \includegraphics[width=0.6\linewidth]{images/GithubWorkflowAzureLogin.png}
   \caption{\label{Figure:GithubWorkflowAzureLogin}Workflow Azure Login Step}
 \end{figure}
 
@@ -1294,7 +1313,7 @@ Once the workflow runner logs into the Azure account, it executes the Shell scri
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\linewidth]{images/GithubWorkflowMigrationJobUpdate.png}
+  \includegraphics[width=0.6\linewidth]{images/GithubWorkflowMigrationJobUpdate.png}
   \caption{\label{Figure:GithubWorkflowMigrationJobUpdate}Workflow Migration Job Update Step}
 \end{figure}
 
@@ -1302,7 +1321,7 @@ The following step executes the Shell script named "run-migration-job.sh". This 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\linewidth]{images/GithubWorkflowMigrationJobExecution.png}
+  \includegraphics[width=0.6\linewidth]{images/GithubWorkflowMigrationJobExecution.png}
   \caption{\label{Figure:GithubWorkflowMigrationJobExecution}Workflow Migration Job Execution Step}
 \end{figure}
 
@@ -1452,13 +1471,13 @@ The cheapest pricing tiers and options that satisfy all parameters and allow uni
   \centering
   \begin{tabular}{|M{135pt}|M{90pt}|M{98pt}|M{90pt}|}
     \hline
-    \multicolumn{1}{|c|}{\textbf{Web \ac{API} Component}} & \multicolumn{1}{c|}{\textbf{Azure}}                   & \multicolumn{1}{c|}{\textbf{\ac{AWS}}}                 & \multicolumn{1}{c|}{\textbf{\ac{GCP}}}        \\
+    \multicolumn{1}{|c|}{\textbf{Web \ac{API} Component}} & \multicolumn{1}{c|}{\textbf{Azure}}                   & \multicolumn{1}{c|}{\textbf{\ac{AWS}}}                 & \multicolumn{1}{c|}{\textbf{\ac{GCP}}}         \\
     \hline
-    \ac{API} Gateway                                      & Standard v2                                           & REST APIs                                              & Default                                       \\
+    \ac{API} Gateway                                      & Standard v2                                           & REST APIs                                              & Default                                        \\
     \hline
-    Microservice Environment                              & Dedicated Plan                                        & Linux/x86                                              & Instance-Based, Compute Flexible CUD          \\
+    Microservice Environment                              & Dedicated Plan                                        & Fargate Pricing, Linux/x86                             & Instance-Based, Compute Flexible CUD           \\
     \hline
-    Data Persistence Layer                                & Provisioned, General Purpose, Standard-series (Gen 5) & Reserved Instances, Web Database Edition, db.t3.xlarge & Enterprise Edition, Web Version db-standard-4 \\
+    Data Persistence Layer                                & Provisioned, General Purpose, Standard-series (Gen 5) & Reserved Instances, Web Database Edition, db.t3.xlarge & Enterprise Edition, Web Version, db-standard-4 \\
     \hline
   \end{tabular}
   \vspace{10pt}
@@ -1478,10 +1497,10 @@ Taking into account the parameters and pricing options defined in Subsections \r
     \multicolumn{1}{|c|}{\textbf{Web \ac{API} Component}} & \multicolumn{1}{c|}{\textbf{Azure}} & \multicolumn{1}{c|}{\textbf{\ac{AWS}}} & \multicolumn{1}{c|}{\textbf{\ac{GCP}}} \\
     \hline
     \ac{API} Gateway                                      & 721.00 \euro                        & 357.36 \euro                           & 299.25 \euro                           \\
-    Microservice Environment                              & 336.38 \euro                        & 246.36 \euro                           & 321.83 \euro                           \\
+    Microservice Environment                              & 336.38 \euro                        & 289.84 \euro                           & 321.83 \euro                           \\
     Data Persistence Layer                                & 423.00 \euro                        & 503.16 \euro                           & 585.93 \euro                           \\
     \hline
-    \textbf{Total}                                        & \textbf{1,480.38 \euro}             & \textbf{1,106.88 \euro}                & \textbf{1,207.01 \euro}                \\
+    \textbf{Total}                                        & \textbf{1,480.38 \euro}             & \textbf{1,150.36 \euro}                & \textbf{1,207.01 \euro}                \\
     \hline
   \end{tabular}
   \vspace{10pt}
@@ -1489,7 +1508,9 @@ Taking into account the parameters and pricing options defined in Subsections \r
   \label{Table:Cost_Analysis_Results}
 \end{table}
 
-The results indicate that \ac{AWS} is the cheapest cloud platform to host the web \ac{API}, with an estimated monthly cost of 1,106.88 \euro. The most expensive option is Microsoft Azure, with 1,480.38 \euro per month. \ac{GCP} is positioned between the two with an estimated monthly cost of 1,207.01 \euro. The higher cost associated with Azure is mainly due to its \ac{API} Gateway requiring a more expensive pricing tier to support \ac{VNet} integration.
+The results indicate that \ac{AWS} is the cheapest cloud platform to host the web \ac{API}, with an estimated monthly cost of 1,150.36 \euro. The most expensive option is Microsoft Azure, with 1,480.38 \euro \space per month. \ac{GCP} is positioned between the two with an estimated monthly cost of 1,207.01 \euro.
+
+The higher cost associated with Azure is mainly due to its \ac{API} Gateway requiring a more expensive pricing tier to support \ac{VNet} integration. Without \ac{VNet} integration, Azure's estimated monthly cost would drop to 1,117.89 \euro, making it the cheapest option.
 
 It is important to note that these results are based on various assumptions and simplifications. Real-world costs may vary substantially based on the specific needs and usage patterns of the web \ac{API}.
 \section{Performance Evaluation}
@@ -1508,6 +1529,8 @@ To satisfy Requirement \ref{Requirement:10}, the 90th percentile of response tim
   \text{Requests (per second)} = \frac{\text{Concurrent users}}{\text{Response time (seconds)}}
   \label{Equation:Requests_Per_Second}
 \end{equation}
+
+\vspace{10pt}
 
 \subsection{Performance Test Setup and Configuration}
 
