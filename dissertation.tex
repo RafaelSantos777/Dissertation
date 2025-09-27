@@ -1650,8 +1650,8 @@ All requirements delineated in Section \ref{Section:Requirements} were fulfilled
    & \ref{Subsection:External_Carrier_API_Communication}, \ref{Subsection:Microservice_Environment}                                                                                                                                                                                            \\
   \hline
   \ref{Requirement:8}
-   & Each microservice is deployed as a separate Azure Container App. Container Apps provide automatic scaling rules based on varying conditions. If a particular web \ac{API} is under high load, the corresponding Container App will scale up to handle the increased demand.
-   & \ref{Subsection:Microservice_Environment}                                                                                                                                                                                                                                                 \\
+   & Each microservice is deployed as a separate Azure Container App. Container Apps provide automatic scaling rules based on varying conditions. If a particular endpoint is under high load, the corresponding Container App will scale up to handle the increased demand.
+   & \ref{Subsection:Microservice_Environment}, \ref{Subsection:Performance_Test_Results_and_Analysis}                                                                                                                                                                                         \\
   \hline
   \ref{Requirement:9}
    & WebCargo Service and Cargofive Service cache freight rates obtained from their respective external carrier \ac{API} for 1 day.
@@ -1677,6 +1677,14 @@ All requirements delineated in Section \ref{Section:Requirements} were fulfilled
 
 \section{Concluding Remarks}
 \label{Section:Concluding_Remarks}
+
+This dissertation addressed the architectural challenges present when developing a complex server-side web \ac{API} that integrates several distinct third-party \acp{API}. The main research question concentrated on how to design and implement a software architecture capable of meeting the functional and non-functional requirements of such systems. The conceived hypothesis proposed that a cloud-based microservices architecture, orchestrated through an API Gateway, would be the most fitting solution.
+
+To study the proposed hypothesis, a proof-of-concept web \ac{API} was designed and implemented, with the freight forwarding industry as the business domain. The implementation integrated with two heterogenous external APIs: WebCargo for air transport and Cargofive for sea transport. The proposed web \ac{API} adhered to a microservices pattern, where each microservice handles a specific business purpose, such as user-related logic, freight quote calculation, or interaction with one of the external carrier \acp{API}. A cloud-native approach was employed, leveraging multiple \ac{PaaS} services on the Microsoft Azure cloud platform. These cloud services were useful in many ways by providing microservice hosting, user identity management, database servers, messaging functionality, a dedicated \ac{API} Gateway service, and more.
+
+The implemented artifact was evaluated to demonstrate its overall effectiveness. All 12 defined software requirements were successfully met, covering functionality, resilience, scalability, security, and performance. Specifically, a performance evaluation confirmed that the system could withstand 200 concurrent users while maintaining a 90th percentile response time of 440.8 milliseconds. In addition, the system demonstrated its ability to scale automatically and in a decoupled manner by creating replicas of a particular microservice based on the experienced request load.
+
+In conclusion, the findings from the whole development process match the initial hypothesis. The decoupled nature of microservices provided resilience, maintainability, and scalability. A monolithic architecture would have made the source code of the web \ac{API} less modular, prevented decoupled scaling, and decreased fault tolerance in case of a failure in a third-party service. The \ac{API} Gateway, in turn, simplified client communication and centralized authentication, shifting away responsibility from individual microservices. In addition, the cloud platform's \ac{PaaS} services offered crucial components to the web \ac{API}'s architecture, avoiding upfront investments and time-consuming implementations of base functionality already provided by cloud platforms.
 
 \section{Academic Contributions}
 \label{Section:Academic_Contributions}
