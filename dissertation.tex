@@ -336,7 +336,7 @@ The freight forwarding industry serves as a case study for this integration chal
 
 Devlop\footnote{Devlop, \url{https://devlop.systems/}, (accessed 16 Aug. 2025)}, an \acp{IS} company from Portugal that specializes in developing software solutions for the transport and logistics sectors, proposed creating a web application to provide real-time freight quotes from multiple carriers to customers. To this effect, two external \acp{API} would be integrated: WebCargo\footnote{WebCargo, \url{https://www.webcargo.co/about/}, (accessed 19 Aug. 2025)} (for air transport) and Cargofive\footnote{Cargofive, \url{https://cargofive.com/}, (accessed 19 Aug. 2025)} (for sea transport). A traditional monolithic software architecture is not suitable for this as the application grows, since an issue in one integration could hinder the entire system. This establishes the need for a more robust and scalable approach.
 
-This dissertation proposes a conceptual framework to address these integration and scalability challenges, which may be present in other projects with similar characteristics in any industry. To do so, it uses a proof-of-concept implementation that applies a microservice-based architecture and is hosted on a remote cloud platform.
+This dissertation proposes a conceptual framework to address these integration and scalability challenges, which may be present in other projects with similar characteristics in any industry. To do so, it uses a proof-of-concept implementation. The defining factors of this implementation are the microservices architecture, which increases resilience and scalability, and the cloud platform, which offers a wide range of components and services that facilitate deployment, management, and scaling of the proposed software solution.
 
 \section{Motivation}
 \label{Section:Motivation}
@@ -562,7 +562,7 @@ Figure \ref{Figure:Monolithic_Architecture} illustrates a monolithic architectur
 
 \FloatBarrier
 \begin{figure}[H]
-  \includegraphics[width=0.9\linewidth]{images/MonolithicArchitecture.png}
+  \includegraphics[width=0.85\linewidth]{images/MonolithicArchitecture.png}
   \caption{\label{Figure:Monolithic_Architecture}Example of a Monolithic Architecture}
 \end{figure}
 \FloatBarrier
@@ -710,7 +710,7 @@ The design and architecture of the web \ac{API} are guided by a specific list of
 \end{requirement}
 
 
-Requirements \ref{Requirement:1} to \ref{Requirement:5} are functional, whereas Requirements \ref{Requirement:6} to \ref{Requirement:12} are non-functional. Requirement \ref{Requirement:1} was explicitly specified by the industry partner Devlop, representing the web \ac{API}'s main functionality. To expand its scope, others were added as reasonable requirements for a real-world, enterprise web \ac{API}.
+Requirements \ref{Requirement:1} to \ref{Requirement:5} are functional, whereas Requirements \ref{Requirement:6} to \ref{Requirement:12} are non-functional. Requirement \ref{Requirement:1} was explicitly specified by the industry partner Devlop. To expand the scope, others were added as reasonable requirements for a real-world, enterprise web \ac{API}.
 
 \section{High-Level Architecture}
 \label{Section:High_Level_Architecture}
@@ -719,7 +719,7 @@ The high-level architecture focuses on the main components of the system and con
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\linewidth]{images/HighLevelArchitecture.png}
+  \includegraphics[width=0.95\linewidth]{images/HighLevelArchitecture.png}
   \caption{\label{Figure:High_Level_Architecture}High-Level Architecture}
 \end{figure}
 
@@ -790,7 +790,7 @@ The client-server communication includes all requests sent by the Client to a se
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\linewidth]{images/ClientServerCommunication.png}
+  \includegraphics[width=0.8\linewidth]{images/ClientServerCommunication.png}
   \caption{\label{Figure:ClientServerCommunication}Client-Server Communication}
 \end{figure}
 
@@ -804,7 +804,7 @@ User Service exposes endpoints that allow the Client to get information about us
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\linewidth]{images/IdentityProviderCommunication.png}
+  \includegraphics[width=0.8\linewidth]{images/IdentityProviderCommunication.png}
   \caption{\label{Figure:IdentityProviderCommunication}Identity Provider Communication}
 \end{figure}
 
@@ -814,7 +814,7 @@ Each microservice establishes a connection to its correspondent database and per
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\linewidth]{images/DatabaseCommunication.png}
+  \includegraphics[width=0.85\linewidth]{images/DatabaseCommunication.png}
   \caption{\label{Figure:DatabaseCommunication}Database Communication}
 \end{figure}
 
@@ -823,11 +823,11 @@ Each microservice establishes a connection to its correspondent database and per
 
 Microservices can communicate with each other directly by making \ac{HTTP} requests to each other's endpoints. Some of these endpoints may only be reachable to other services, not the Client. This allows for real-time data exchange and coordination between services.
 
-The web \ac{API} makes use of this type of communication when Quotation Service needs to obtain freight rates from WebCargo Service or Cargofive Service, as shown in Figure \ref{Figure:DirectCommunication}.
+The web \ac{API} makes use of this type of communication when Quotation Service requires freight rates from WebCargo Service or Cargofive Service, as shown in Figure \ref{Figure:DirectCommunication}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1\linewidth]{images/DirectCommunication.png}
+  \includegraphics[width=0.9\linewidth]{images/DirectCommunication.png}
   \caption{\label{Figure:DirectCommunication}Direct Inter-Service Communication}
 \end{figure}
 
@@ -842,26 +842,26 @@ Firstly, User Service must be informed about the deletion to propagate it to the
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1\linewidth]{images/EventDrivenCommunicationUserDeleted.png}
+  \includegraphics[width=0.9\linewidth]{images/EventDrivenCommunicationUserDeleted.png}
   \caption{\label{Figure:EventDrivenCommunicationUserDeleted}Event-Driven Inter-Service Communication: User Deleted}
 \end{figure}
 
-The second scenario occurs when Cargofive Service needs to synchronize data with Quotation Service. This synchronization is necessary because the Cargofive \Ac{API} uses its own identifiers for seaports, unlike the WebCargo \ac{API}, which can identify airports through standardized codes. Cargofive Service fetches the list of supported seaports from the Cargofive \ac{API} weekly. Cargofive Service publishes a "SeaportsUpdated" event to the Message Broker containing the relevant data. Quotation Service is subscribed to this event, so it is notified and updates its database if necessary. This process is shown in Figure \ref{Figure:EventDrivenCommunicationCargofive}.
+The second scenario occurs when Cargofive Service needs to synchronize data with Quotation Service. This synchronization is necessary because the Cargofive \Ac{API} uses its own identifiers for seaports, unlike the WebCargo \ac{API}, which can identify airports through standardized codes. Cargofive Service fetches the list of supported seaports from the Cargofive \ac{API} weekly. Cargofive Service publishes a "SeaportsUpdated" event to the Message Broker with the relevant data. Quotation Service is subscribed to this event, so it is notified and updates its database if necessary. This process is shown in Figure \ref{Figure:EventDrivenCommunicationCargofive}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\linewidth]{images/EventDrivenCommunicationCargofive.png}
+  \includegraphics[width=0.8\linewidth]{images/EventDrivenCommunicationCargofive.png}
   \caption{\label{Figure:EventDrivenCommunicationCargofive}Event-Driven Inter-Service Communication: Cargofive Synchronization}
 \end{figure}
 
 \subsection{External Carrier API Communication}
 \label{Subsection:External_Carrier_API_Communication}
 
-WebCargo Service and Cargofive Service communicate with the WebCargo and Cargofive \acp{API}, respectively. The two services use the \acp{API} as clients to send requests and receive responses, as shown in Figure \ref{Figure:ExternalCarrierAPICommunication}. The \ac{API} keys required for authentication are retrieved from the Secret Storage at runtime and stored in memory.
+WebCargo Service and Cargofive Service communicate with the WebCargo and Cargofive \acp{API}, respectively. The two services use the corresponding \ac{API} as clients to obtain freight rates by making requests and receiving responses, as shown in Figure \ref{Figure:ExternalCarrierAPICommunication}. The \ac{API} keys required for authentication are retrieved from the Secret Storage at runtime and then stored in memory.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\linewidth]{images/ExternalCarrierAPICommunication.png}
+  \includegraphics[width=0.8\linewidth]{images/ExternalCarrierAPICommunication.png}
   \caption{\label{Figure:ExternalCarrierAPICommunication}External Carrier \ac{API} Communication}
 \end{figure}
 
