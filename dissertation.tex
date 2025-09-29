@@ -387,13 +387,11 @@ The following list briefly explains what each step entails and where it is locat
 \section{Document Structure}
 \label{Section:Document_Structure}
 
-This document is divided into seven chapters.
+This document is divided into six chapters.
 
 Chapter \ref{Chapter:Introduction} introduces the context, motivation, research questions, and the research methodology of this dissertation.
 
-Chapter \ref{Chapter:Literature_Search_Methodology} explains the literature search methodology, including the strategy for identifying relevant literature and the papers included in the review.
-
-Chapter \ref{Chapter:Literature_Review} presents a literature review that offers a theoretical background on the main topics relevant to this dissertation.
+Chapter \ref{Chapter:Literature_Review} explains the literature search methodology, including the strategy for identifying relevant literature and the papers included in the review. After that, it presents a literature review that offers a theoretical background on the main topics relevant to this dissertation.
 
 Chapter \ref{Chapter:Design_And_Architecture} details the design and architecture of the proposed solution.
 
@@ -403,24 +401,25 @@ Chapter \ref{Chapter:Evaluation} evaluates the implemented solution on correctne
 
 Chapter \ref{Chapter:Conclusion} concludes the dissertation, highlighting the main findings, limitations, and suggesting future work.
 
+\chapter{Literature Review}
+\label{Chapter:Literature_Review}
 
-\chapter{Literature Search Methodology}
-\label{Chapter:Literature_Search_Methodology}
+This chapter describes the methodology used to gather relevant literature for the review presented in Chapter \ref{Chapter:Literature_Review}, along with its results. The search process follows the \ac{PRISMA} guidelines. Then, based on the literature search results, this chapter provides a theoretical background on the main topics relevant to this dissertation.
 
-This chapter describes the methodology used to gather relevant literature for the review presented in Chapter \ref{Chapter:Literature_Review}, along with its results. The search process follows the \ac{PRISMA} guidelines, as explained in Section \ref{Section:PRISMA_S}.
+\section{Literature Search Methodology}
 
-\section{PRISMA-S}
-\label{Section:PRISMA_S}
+\subsection{PRISMA-S}
+\label{Subsection:PRISMA_S}
 
 Because \ac{DSRM} does not define a method to search scientific literature, PRISMA-S was used as the basis for the literature search. \ac{PRISMA} is a complete set of guidelines used to improve the reporting of systematic literature reviews, promoting rigor. PRISMA-S (or PRISMA-Search) is a reporting guideline that extends PRISMA, contributing with a detailed checklist specifically for reporting literature search methods.
 
-\section{Information Sources}
-\label{Section:Information_Sources}
+\subsection{Information Sources}
+\label{Subsection:Information_Sources}
 
 The b-on\footnote{b-on, \url{https://www.b-on.pt/en/}, (accessed 16 Aug. 2025)} platform was used for the PRISMA-S literature search. b-on is a library that aggregates multiple databases\footnote{b-on, "Collections", \url{https://www.b-on.pt/en/collections/}, (accessed 16 Aug. 2025)}, including IEEE, Web of Science, and Elsevier. This agglomeration removes the need to search individual databases separately.
 
-\section{Search Strategies}
-\label{Section:Search_Strategies}
+\subsection{Search Strategies}
+\label{Subsection:Search_Strategies}
 
 The search was performed using the exact query shown below, where "TI" and "AB" stand for "title" and "abstract", respectively:
 \vspace{0.5cm}
@@ -440,8 +439,8 @@ The following search filters were applied in sequence:
   \item The document must be written in English or Portuguese.
 \end{enumerate}
 
-\section{Search Results}
-\label{Section:Search_Results}
+\subsection{Search Results}
+\label{Subsection:Search_Results}
 
 Once the search query was run and all aforementioned filters were applied, all filtered documents went through a process to determine whether they would be included in the final review. That process is shown in Figure \ref{Figure:Literature_Search_Flow_Diagram}.
 
@@ -453,17 +452,12 @@ Once the search query was run and all aforementioned filters were applied, all f
 
 The search query identified 756 documents. Upon filtering and deduplication, 65 documents remained. These documents went through a screening process that involved reading their titles and abstracts to determine their relevance. After screening, 13 documents were left. The eligibility of these documents was then evaluated by reading their full text to verify their relevance more rigorously. Only 10 documents were included in the final review, some of which did not present a complete architectural approach for web \acp{API} or web applications. This outcome matches the lack of literature on this topic mentioned in Section \ref{Section:Motivation}.
 
-\section{Further Search}
-\label{Section:Further_Search}
+\subsection{Further Search}
+\label{Subsection:Further_Search}
 
 The 10 resulting documents gathered in Section \ref{Section:Search_Results} did not offer a comprehensive and varied view of web applications or web \acp{API}. Therefore, additional literature searches were conducted based on topics present in those 10 documents, namely Monolithic and Microservice Architectures, Cloud Computing, Authentication and Authorization, Containerization, and Web \ac{API} Frameworks.
 
 Furthermore, a literature search on freight forwarding was done to better understand the business domain of the web API that will be developed. To perform this further research, b-on, Google Scholar, and websites from authoritative sources were accessed.
-
-\chapter{Literature Review}
-\label{Chapter:Literature_Review}
-
-Based on the literature search methodology presented in Chapter \ref{Chapter:Literature_Search_Methodology}, this chapter provides a theoretical background on the main topics relevant to this dissertation.
 
 \section{Freight Transportation Overview}
 \label{Section:Freight_Transportation_Overview}
